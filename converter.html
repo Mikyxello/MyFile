@@ -42,14 +42,14 @@
 	<div class="navbar-fixed">
 		<nav>
 			<div class="nav-wrapper">
-				<a href="#" class="brand-logo"><img src="img/logo-file-256x256.png" class="responsive" height="100%" width="50%" alt=""></a>
+				<a href="index.html" class="brand-logo"><img src="img/logo-file-256x256.png" class="responsive" height="100%" width="50%" alt=""></a>
 				<ul class="right hide-on-med-and-down">
-					<li><a href="#">MyFile</a></li>
+					<li><a href="index.html">MyFile</a></li>
 					<!-- Dropdown Trigger -->
 					<!--
 					<li><a class="dropdown-button" href="#" data-activates="conversion_list">Converti<i class="material-icons right">arrow_drop_down</i></a></li>
 					-->
-					<li><a href="converter.html">Converti File</a></li>
+					<li><a href="#">Converti File</a></li>
 					<li><a href="#">Il nostro team</a></li>
 					<li><a href="#">Login</a></li>
 				</ul>
@@ -59,44 +59,26 @@
 
 	<div class="main_container">
 		<div class="container">
-			<h1 class="center">MyFile Online</h1>
-			<div class="carousel">
-				<a class="carousel-item" href="#"><img src="img/carousel/jpg_carousel.png"></a>
-				<a class="carousel-item" href="#"><img src="img/carousel/pdf_carousel.png"></a>
-				<a class="carousel-item" href="#"><img src="img/carousel/excel_carousel.png"></a>
-				<a class="carousel-item" href="#"><img src="img/carousel/word_carousel.png"></a>
-				<a class="carousel-item" href="#"><img src="img/carousel/mp4_carousel.png"></a>
-				<a class="carousel-item" href="#"><img src="img/carousel/avi_carousel.png"></a>
-			</div>
-			<script>
-				$(document).ready(function(){
-					$('.carousel').carousel();
-				});
-			</script>
-        
-			<div class="row">
-		    	<div class="col s4">
-		    		<div class="center promo promo-example">
-						<i class="material-icons">flash_on</i>
-						<p class="promo-caption">Velocizza le tue conversioni</p>
-						<p class="light center">Converti i tuoi file con MyFile Online da qualsiasi formato</p>
+			<form action="#">
+				<div class="file-field input-field">
+					<div class="btn">
+						<span>File</span>
+						<input type="file">
+					</div>
+					<div class="file-path-wrapper">
+						<input class="file-path validate" type="text">
 					</div>
 				</div>
-				<div class="col s4">
-					<div class="center promo promo-example">
-						<i class="material-icons">group</i>
-						<p class="promo-caption">Salva i tuoi file nella rete</p>
-						<p class="light center">Puoi salvare i tuoi file convertiti nel tuo cloud così da poterli riutilizzare senza occupare spazio nel tuo PC</p>
-					</div>
+				<div class="input-field col s12 m6">
+					<label>Converti in</label>
+					<select class="icons">
+						<option value="" disabled selected>Choose your option</option>
+						<option value="convert_to_pdf" data-icon="img/pdf_carousel.png" class="left circle">PDF</option>
+						<option value="convert_to_excel" data-icon="img/excel_carousel.png" class="left circle">Excel</option>
+						<option value="convert_to_word" data-icon="img/word_carousel.png" class="left circle">Word</option>
+					</select>
 				</div>
-				<div class="col s4">
-					<div class="center promo promo-example">
-						<i class="material-icons">settings</i>
-						<p class="promo-caption">Facile e veloce</p>
-						<p class="light center">Con MyFile Online in pochi secondi converti i file che ti servono con un semplice click!</p>
-					</div>
-				</div>
-		    </div>
+			</form>
 		</div>
 	</div>
 

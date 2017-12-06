@@ -8,18 +8,21 @@ Il gruppo si pone l'obbiettivo di realizzae una web app chiamata MyFile, ovvero 
 *Riccardo Ceccarelli*
 
 ## API Reference
-* Using API [FileZigZag](http://www.filezigzag.com/api)
+* [FileZigZag](http://www.filezigzag.com/api)
+* [Materialize](http://materializecss.com/)
 
 ## License
-* License
+* License MIT
 
-#ToDo
 
-###Funzionalità da implementare
-* TODO
 
-##Bugs
-* TODO
+# To Do
 
-###Done
+### Funzionalità da implementare
+* Pagine per conversione PDF to DOCX, MP4 to AVI, JPG to PNG, ...
+
+## Bugs
+* Null
+
+### Done
 * <del>Starting website</del>
