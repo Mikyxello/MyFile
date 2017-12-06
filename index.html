@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+	<meta author="Michele Anselmi, Gianmarco Cariggi, Riccardo Ceccarelli">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<meta charset="utf-8">
+
+	<title>MyFile | Home</title>
+
+	<!-- Import Google Icon Font -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Import jQuery -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <!-- RALEWAY FONT -->
+  	<link href="https://fonts.googleapis.com/css?family=Raleway:600" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel='shortcut icon' type='image/x-icon' href='img/favicon.png' />
+
+    <!-- Our CSS/JS -->
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script type="text/javascript" src="js/scripts.js"></script>
+
+    <!-- Import Materialize Library from Files -->
+    <!-- 
+    <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css"  media="screen,projection"/>
+    <script type="text/javascript" src="js/materialize.min.js"></script>
+	-->
+
+	<!-- Import Materialize Library from CDNs -->
+  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+</head>
+<body>
+	<!-- Dropdown Structure -->
+	<ul id="conversion_list" class="dropdown-content">
+	  <li><a href="#">PDF to DOC</a></li>
+	  <li><a href="#">DOC to PDF</a></li>
+	  <li><a href="#">PDF to JPG</a></li>
+	</ul>
+	<div class="navbar-fixed">
+		<nav>
+			<div class="nav-wrapper">
+				<a href="#" class="brand-logo"><img src="img/logo-file-256x256.png" class="responsive" height="100%" width="50%" alt=""></a>
+				<ul class="right hide-on-med-and-down">
+					<li><a href="#">MyFile</a></li>
+					<!-- Dropdown Trigger -->
+					<li><a class="dropdown-button" href="#" data-activates="conversion_list">Converti<i class="material-icons right">arrow_drop_down</i></a></li>
+					<li><a href="#">Il nostro team</a></li>
+					<li><a href="#">Login</a></li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+
+	<div class="main_container">
+		<div class="container">
+			<h1 class="center">MyFile Online</h1>
+			<div class="carousel">
+				<a class="carousel-item" href="#one!"><img src="https://lorempixel.com/250/250/nature/1"></a>
+				<a class="carousel-item" href="#two!"><img src="https://lorempixel.com/250/250/nature/2"></a>
+				<a class="carousel-item" href="#three!"><img src="https://lorempixel.com/250/250/nature/3"></a>
+				<a class="carousel-item" href="#four!"><img src="https://lorempixel.com/250/250/nature/4"></a>
+				<a class="carousel-item" href="#five!"><img src="https://lorempixel.com/250/250/nature/5"></a>
+			</div>
+			<script>
+				$(document).ready(function(){
+					$('.carousel').carousel();
+				});
+			</script>
+        
+			<div class="row">
+		    	<div class="col s4">
+		    		<div class="center promo promo-example">
+						<i class="material-icons">flash_on</i>
+						<p class="promo-caption">Velocizza le tue conversioni</p>
+						<p class="light center">Converti i tuoi file con MyFile Online da qualsiasi formato</p>
+					</div>
+				</div>
+				<div class="col s4">
+					<div class="center promo promo-example">
+						<i class="material-icons">group</i>
+						<p class="promo-caption">Salva i tuoi file nella rete</p>
+						<p class="light center">Puoi salvare i tuoi file convertiti nel tuo cloud così da poterli riutilizzare senza occupare spazio nel tuo PC</p>
+					</div>
+				</div>
+				<div class="col s4">
+					<div class="center promo promo-example">
+						<i class="material-icons">settings</i>
+						<p class="promo-caption">Facile e veloce</p>
+						<p class="light center">Con MyFile Online in pochi secondi converti i file che ti servono con un semplice click!</p>
+					</div>
+				</div>
+		    </div>
+		</div>
+	</div>
+
+	<footer class="page-footer">
+    	<div class="container">
+			<div class="row">
+				<div class="col l6 s12">
+					<h5 class="white-text">MyFile</h5>
+						<p class="grey-text text-lighten-4">Your favorite online file converter!</p>
+              	</div>
+              	<!--
+              	<div class="col l4 offset-l2 s12">
+                	<h5 class="white-text">Link utili</h5>
+                	<ul>
+	                	<li><a class="grey-text text-lighten-3" href="#">Link</a></li>
+                	</ul>
+              	</div>
+              -->
+            </div>
+		</div>
+		<div class="footer-copyright">
+			<div class="container">
+				© 2014 Copyright MyFile - M. Anselmi / R. Ceccarelli / G. Cariggi
+				<!--<a class="grey-text text-lighten-4 right" href="#!">More links</a>-->
+            </div>
+		</div>
+    </footer>
+	
+</body>
+</html>
