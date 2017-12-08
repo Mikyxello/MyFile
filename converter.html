@@ -60,11 +60,11 @@
 	<div class="main-container">
 		<div class="container">
 			<!-- ACTION avrà la send del file con il tipo di conversione tramite HTTP utilizzando FileZigZag -->
-			<form action="#" method="POST">
+			<div>
 				<div class="file-field input-field">
 					<div class="btn">
 						<span>File</span>
-						<input type="file">
+						<input type="file" id="file">
 					</div>
 					<div class="file-path-wrapper">
 						<input class="file-path validate" type="text">
@@ -85,11 +85,11 @@
 					});
 				</script>
 				<div class="input-field col s12 m6" style="text-align: center !important;">
-					<button class="btn waves-effect waves-light" type="submit" name="action">Converti
+					<button class="btn waves-effect waves-light" name="action" onclick="requestAjax()">Converti
 						<i class="material-icons right">send</i>
 					</button>
 				</div>
-			</form>
+			</div>
 		</div>
 	</div>
 
