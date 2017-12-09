@@ -5,10 +5,9 @@ POST /jobs HTTP/1.1
 Host: http://api.filezigzag.com/fzz.svc/
 token: <your API token here>
 Content-Type: application/json
-*/
 
-// URL = http://api.filezigzag.com/fzz.svc/convertfile
-/* 
+URL = http://api.filezigzag.com/fzz.svc/convertfile
+
 {
 	"target":"png", 
 	"category":"image",
@@ -17,54 +16,66 @@ Content-Type: application/json
 
 {
   "Convertfile": {
-    "id": "a68f5430-3235-4e2d-894f-652df8257cda"
+    "id": <file id>
   }
 }
 */
 
+/* NON FUNZIONANTI */
 
-// URL = http://api.filezigzag.com/fzz.svc/Getfile
-/*
-{
-"id":"9162555c-5faf-4bdc-a075-18a13684fb0a"
-}
+/* TEST IN NODEJS
+function convert(file) {
+	var request = require("request");
 
-{
-  "Getfile": {
-    "Description": "Converted file avaliable",
-    "FileURL": "https://filezigzag.s3.amazonaws.com/2/d3480506-dced-45c4-8aec-2f0e7f72cfb4/Components_GIF_gif_MP4_mp4.avi?AWSAccessKeyId=AKIAJP4TWG7FXXCF5XAQ&Expires=1480517001&Signature=y0dj0DxDIM3Oxr5hxg50CrQBgKQ%3D",
-    "Status": "7"
-  }
-}
-Status 1: File Received , 2 Queue, 3 Processing, 4 Fail, 5 Lock, 6 Deleted, 7 Success, 8 Unknown Error
-*/
-
-function requestAjax() {
-	var obj = {
-		"target":"png",
-		"category":"image",
-		"source":"http://www.geektoolz.net/Content/Wallpapers/Single%20Screen/Mac-Leopard-Wallpaper.jpg"
+	var requestData = {
+		'target':'png',
+		'category':'image',
+		'source': 'https://jpeg.org/images/jpeg-home.jpg'
 	};
 
-	var header = {
-		"Access-Control-Allow-Origin": "*",
-		"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
-		"token": "3ee1b804-a811-43c4-9300-0d72a10e0282-886ece8e-e9a4-4102-ae1f-4ad1e690693c",
-		"Host": "http://api.filezigzag.com/fzz.svc/",
-		"Content-Type": "application/json"
+	var options = {  
+	    url: 'http://api.filezigzag.com/fzz.svc/convertfile',
+	    method: 'POST',
+	    headers: {
+	        'Accept': 'application/json',
+	        'Content-Type': 'application/json',
+	        'token': '3ee1b804-a811-43c4-9300-0d72a10e0282-886ece8e-e9a4-4102-ae1f-4ad1e690693c',
+	        'Host': 'http://api.filezigzag.com/fzz.svc/'
+    	},
+    	json: true,
+    	body: JSON.stringify(requestData)
 	};
 
-	$.ajax({
-		type: "POST",
-		url: "http://api.filezigzag.com/fzz.svc/convertfile",
-		datatype: "json",
-		data: JSON.stringify(obj),
-		headers: header,
-		crossDomain : true,
-		xhrFields: {
-			withCredentials: true
-		},
-		success: function(res) {alert(res.responseText);},
-		error: function(res) {alert("Error " + res.status);}
+	request(options, function(err, res, body) {
+		alert(res);
 	});
 }
+*/
+
+/* TEST CON AJAX
+function convert(file) {
+	$.ajax({
+	    type: "POST",
+	    url: "http://api.filezigzag.com/fzz.svc/convertfile",                        
+	    dataType: "text",
+	    contentType: "application/json",
+	   	headers: {
+	   		"Access-Control-Allow-Origin": "*",
+	   		"Cache-Control": "no-cache",
+	   		"Access-Control-Allow-Methods": "GET, POST",
+	   		"Access-Control-Allow-Headers": "Content-Type, Accept",
+	   		'Accept': 'application/json',
+	        'Content-Type': 'application/json',
+	        'token': '3ee1b804-a811-43c4-9300-0d72a10e0282-886ece8e-e9a4-4102-ae1f-4ad1e690693c',
+	        'Host': 'http://api.filezigzag.com/fzz.svc/'
+	    },
+	    data: "{'target':'png', 'category':'image', 'source': 'https://jpeg.org/images/jpeg-home.jpg'}",         
+	    success:function(data, status) {             
+	        console.log(data); //gives 1                
+	    },
+	    error:function(request, status, error) {
+	        alert("o0ops");           
+	    }
+	});
+}
+*/
