@@ -1,81 +1,174 @@
-/* Documentation by http://www.filezigzag.com/api */
+function create() {
+	/* DEBUG OUTPUT */
+	console.log("CREATE");
+	/*--------------*/
 
-/* Header
-POST /jobs HTTP/1.1
-Host: http://api.filezigzag.com/fzz.svc/
-token: <your API token here>
-Content-Type: application/json
+	var selectedfile = $("#selectedfile").val();
+    var inputformat = selectedfile.split('.').pop();
+	var outputformat = $("#outputformat").val();
+	var tmppath = $("#tmppath").val(); 
+	var filename = $("#filename").val();
 
-URL = http://api.filezigzag.com/fzz.svc/convertfile
+	/* DEBUG OUTPUT */
+	console.log("SELECTEDFILE: " + selectedfile);
+	console.log("INPUTFORMAT: " + inputformat);
+	console.log("OUTPUTFORMAT: " + outputformat);
+	console.log("TMPPATH: " + tmppath);
+	console.log("FILENAME: " + filename);
+	/*--------------*/
 
-{
-	"target":"png", 
-	"category":"image",
-	"source":"https://www.filezigzag.com/2/ea6bc5d3-03ca-44d4-b524-afd374ef7636/avi_to_mp4.jpg"
-}
-
-{
-  "Convertfile": {
-    "id": <file id>
-  }
-}
-*/
-
-/* NON FUNZIONANTI */
-
-/* TEST IN NODEJS
-function convert(file) {
-	var request = require("request");
-
-	var requestData = {
-		'target':'png',
-		'category':'image',
-		'source': 'https://jpeg.org/images/jpeg-home.jpg'
-	};
-
-	var options = {  
-	    url: 'http://api.filezigzag.com/fzz.svc/convertfile',
-	    method: 'POST',
-	    headers: {
-	        'Accept': 'application/json',
-	        'Content-Type': 'application/json',
-	        'token': '3ee1b804-a811-43c4-9300-0d72a10e0282-886ece8e-e9a4-4102-ae1f-4ad1e690693c',
-	        'Host': 'http://api.filezigzag.com/fzz.svc/'
-    	},
-    	json: true,
-    	body: JSON.stringify(requestData)
-	};
-
-	request(options, function(err, res, body) {
-		alert(res);
-	});
-}
-*/
-
-/* TEST CON AJAX
-function convert(file) {
 	$.ajax({
-	    type: "POST",
-	    url: "http://api.filezigzag.com/fzz.svc/convertfile",                        
-	    dataType: "text",
-	    contentType: "application/json",
-	   	headers: {
-	   		"Access-Control-Allow-Origin": "*",
-	   		"Cache-Control": "no-cache",
-	   		"Access-Control-Allow-Methods": "GET, POST",
-	   		"Access-Control-Allow-Headers": "Content-Type, Accept",
-	   		'Accept': 'application/json',
-	        'Content-Type': 'application/json',
-	        'token': '3ee1b804-a811-43c4-9300-0d72a10e0282-886ece8e-e9a4-4102-ae1f-4ad1e690693c',
-	        'Host': 'http://api.filezigzag.com/fzz.svc/'
-	    },
-	    data: "{'target':'png', 'category':'image', 'source': 'https://jpeg.org/images/jpeg-home.jpg'}",         
-	    success:function(data, status) {             
-	        console.log(data); //gives 1                
-	    },
-	    error:function(request, status, error) {
-	        alert("o0ops");           
-	    }
+		method: "POST",
+		url: "https://api.cloudconvert.com/process",
+		headers: {
+			"Authorization": "Bearer GOF05MzbYRdxGeKiQAzsdm968KU1-rV099JMD2oRMkjtFP4SZbggvhn4qjKKutxM2xUQGq0jm3sa6LXqW6BPUA",
+			"Content-Type": "application/json"
+		},
+		data: '{\
+			"inputformat": "'+inputformat+'",\
+			"outputformat": "'+outputformat+'"\
+		}',
+		success: function(data) {
+
+			/* DEBUG OUTPUT */
+			console.log("CREATE SUCCESS");
+			/*--------------*/
+
+			var url = "https:"+data.url;
+			var id = data.id;
+			var host = data.host;
+
+			/* DEBUG OUTPUT */
+			console.log("URL: " + url);
+			console.log("ID: " + id);
+			console.log("HOST: " + host);
+			/*--------------*/
+
+			start(url, id, host, filename, outputformat, tmppath);
+		},
+		error: function(xhr, status, error) {
+			/* DEBUG OUTPUT */
+			console.log("CREATE ERROR");
+			console.log("XHR: "+xhr);
+			console.log("STATUS: "+status);
+			console.log("ERROR: "+error);
+			/*--------------*/
+		}
 	});
 }
-*/
+
+function start(url, id, host, filename, outputformat, tmppath) {
+	/* DEBUG OUTPUT */
+	console.log("START");
+	/*--------------*/
+
+	$.ajax({
+		method: "POST",
+		url: url,
+		data: '{\
+			"input": "download",\
+			"file": "'+tmppath+'",\
+			"outputformat": "'+outputformat+'",\
+			"filename": "'+filename+'",\
+			"download": true,\
+			}',
+		success: function() {
+			/* DEBUG OUTPUT */
+			console.log("START SUCCESS");
+			/*--------------*/
+
+			status(url);
+		},
+		error: function(xhr, status, error) {
+			/* DEBUG OUTPUT */
+			console.log("START ERROR")
+			console.log("XHR: "+xhr);
+			console.log("STATUS: "+status);
+			console.log("ERROR: "+error);
+			/*--------------*/
+		}
+	});
+}
+
+function status(url) {
+	/* DEBUG OUTPUT */
+	console.log("CONVERT");
+	/*--------------*/
+
+	/* DEBUG OUTPUT */
+	console.log("URL: " + url);
+	/*--------------*/
+
+	$.ajax({
+		method: "GET",
+		url: url,
+		success: function(data) {
+			/* DEBUG OUTPUT */
+			console.log("CONVERT SUCCESS");
+			/*--------------*/
+
+			/* DEBUG OUTPUT */
+			console.log("CONVERT STEP: " + data.step);
+			/*--------------*/			
+
+			if(data.step == "wait") {
+				/* DEBUG OUTPUT */
+				console.log("CONVERT WAITING");
+				/*--------------*/
+				setTimeout(status(url),5000);
+			}
+			else if(data.step == "convert") {
+				/* DEBUG OUTPUT */
+				console.log("CONVERTING "+data.percent+"...");
+				/*--------------*/
+				setTimeout(status(url),5000);
+			}
+			else if(data.step == "finished") {
+				/* DEBUG OUTPUT */
+				console.log("CONVERT FINISHED");
+				/*--------------*/
+				download(data.url);
+			}
+			else if(data.step == "input") {
+				/* DEBUG OUTPUT */
+				console.log("CONVERT INPUT");
+				setTimeout(status(url),5000);
+				/*--------------*/
+			}
+			else if(data.step == "output") {
+				/* DEBUG OUTPUT */
+				console.log("CONVERT OUTPUT PRESO");
+				setTimeout(status(url),5000);
+				/*--------------*/
+			}
+			else if(data.step == "error") {
+				/* DEBUG OUTPUT */
+				console.log("CONVERT ERROR");
+				/*--------------*/
+			}
+			else {
+				/* DEBUG OUTPUT */
+				console.log("CONVERT SUCCESS ERROR");
+				/*--------------*/
+			}
+		},
+		error: function(xhr, status, error) {
+			/* DEBUG OUTPUT */
+			console.log("STATUS ERROR");
+			console.log("XHR: "+xhr);
+			console.log("STATUS: "+status);
+			console.log("ERROR: "+error);
+			/*--------------*/
+		}
+	});
+}
+
+function download(url) {
+	/* DEBUG OUTPUT */
+	console.log("DOWNLOAD");
+	/*--------------*/
+	$.ajax({
+		method: "GET",
+		url: url
+	});
+}

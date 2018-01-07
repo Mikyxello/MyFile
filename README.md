@@ -4,16 +4,17 @@ Il gruppo si pone l'obbiettivo di realizzae una web app chiamata MyFile, ovvero 
 
 ## Collaboratori
 *Michele Anselmi* @Mikyxello
-*Gianmarco Cariggi*
-*Riccardo Ceccarelli*
+*Gianmarco Cariggi* @giacar
+*Riccardo Ceccarelli* @ricciricciard
 
 ## API Reference
 * [FileZigZag](http://www.filezigzag.com/api)
 * [Materialize](http://materializecss.com/)
+* [Bootstrap](https://getbootstrap.com/)
+* [Cloud Convert](https://cloudconvert.com/)
 
 ## License
 * License MIT
-
 
 
 # To Do

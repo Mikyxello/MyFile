@@ -15,67 +15,58 @@
   	<link href="https://fonts.googleapis.com/css?family=Raleway:600" rel="stylesheet">
     <!-- Favicon -->
     <link rel='shortcut icon' type='image/x-icon' href='img/favicon.png' />
+    <!-- FontAwesome -->
+    <script src="https://use.fontawesome.com/c761b0c982.js"></script>
 
     <!-- Our CSS/JS -->
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <script type="text/javascript" src="js/scripts.js"></script>
-
-    <!-- Import Materialize Library from Files -->
-    <!-- 
-    <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css"  media="screen,projection"/>
-    <script type="text/javascript" src="js/materialize.min.js"></script>
-	-->
+    <link rel="stylesheet" type="text/css" href="css\style.css">
+    <script type="text/javascript" src="js\scripts.js"></script>
 
 	<!-- Import Materialize Library from CDNs -->
   	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
   	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 </head>
 <body>
-	<!-- Dropdown Structure -->
-	<!-- 
-	<ul id="conversion_list" class="dropdown-content">
-	  <li><a href="#">PDF to DOC</a></li>
-	  <li><a href="#">DOC to PDF</a></li>
-	  <li><a href="#">PDF to JPG</a></li>
-	</ul>
-	-->
 	<div class="navbar-fixed">
 		<nav>
 			<div class="nav-wrapper">
 				<a href="index.html" class="brand-logo"><img src="img/logo-file-256x256.png" class="responsive" height="100%" width="50%" alt=""></a>
 				<ul class="right hide-on-med-and-down">
 					<li><a href="index.html">MyFile</a></li>
-					<!-- Dropdown Trigger -->
-					<!--
-					<li><a class="dropdown-button" href="#" data-activates="conversion_list">Converti<i class="material-icons right">arrow_drop_down</i></a></li>
-					-->
 					<li><a href="#">Converti File</a></li>
-					<li><a href="#">Il nostro team</a></li>
-					<li><a href="#">Login</a></li>
+					<li><a href="team.html">Il nostro team</a></li>
+					<li><a href="login.html">Login</a></li>
 				</ul>
 			</div>
 		</nav>
 	</div>
 
-	<div class="main-container">
+	<div class="main_container">
 		<div class="container">
-			<!-- ACTION avrà la send del file con il tipo di conversione tramite HTTP utilizzando FileZigZag -->
-			<form action="http://api.filezigzag.com/fzz.svc/convertfile" method="POST">
+			<div class="form_container">
 				<div class="file-field input-field">
 					<div class="btn">
 						<span>File</span>
-						<input type="file" id="file">
+						<input type="hidden" id="tmppath" name="tmppath">
+						<input type="file" id="selectedfile" name="selectedfile">
 					</div>
 					<div class="file-path-wrapper">
-						<input class="file-path validate" type="text">
+						<input class="file-path validate" type="text" id="filename" name="filename">
 					</div>
 				</div>
+				<script>
+					$('#selectedfile').change( function(event) {
+						var tmppath = URL.createObjectURL(event.target.files[0]);
+						$("#tmppath").val(tmppath);
+					});
+				</script>
 				<div class="input-field col s12 m6">
-					<select class="icons">
-						<option value="" disabled selected>Choose your option</option>
-						<option value="convert_to_pdf" data-icon="img/carousel/pdf_carousel.png" class="left circle">PDF</option>
-						<option value="convert_to_excel" data-icon="img/carousel/excel_carousel.png" class="left circle">Excel</option>
-						<option value="convert_to_word" data-icon="img/carousel/word_carousel.png" class="left circle">Word</option>
+					<select class="icons" name="outputformat" id="outputformat">
+						<option value="pdf" data-icon="img/carousel/pdf_carousel.png" class="left circle">PDF</option>
+						<option value="xls" data-icon="img/carousel/excel_carousel.png" class="left circle">File Excel</option>
+						<option value="doc" data-icon="img/carousel/word_carousel.png" class="left circle">File Word</option>
+						<option value="png" data-icon="img/carousel/png_carousel.png" class="left circle">PNG</option>
+						<option value="jpg" data-icon="img/carousel/jpg_carousel.png" class="left circle">JPEG</option>
 					</select>
 					<label>Converti in</label>
 				</div>
@@ -85,15 +76,16 @@
 					});
 				</script>
 				<div class="input-field col s12 m6" style="text-align: center !important;">
-					<button class="btn waves-effect waves-light" name="action" onclick="convert($('#file').val())">Converti
-						<i class="material-icons right">send</i>
+					<button class="btn waves-effect waves-light" name="action" onclick="create()">Converti
+						<i class="fa fa-file" aria-hidden="true"></i>
 					</button>
 				</div>
+				<br><br><br><br><br>
 			</div>
 		</div>
 	</div>
 
-	<footer class="page-footer">
+	<div class="page-footer">
     	<div class="container">
 			<div class="row">
 				<div class="col l6 s12">
@@ -112,8 +104,7 @@
 		</div>
 		<div class="footer-copyright">
 			<div class="container">
-				© 2014 Copyright MyFile - M. Anselmi / R. Ceccarelli / G. Cariggi
-				<!--<a class="grey-text text-lighten-4 right" href="#!">More links</a>-->
+				© 2014 Copyright MyFile - <a href="https://github.com/Mikyxello">M. Anselmi</a> / <a href="https://github.com/ricciricciard">R. Ceccarelli</a> / <a href="https://github.com/giacar">G. Cariggi</a>
             </div>
 		</div>
     </footer>
