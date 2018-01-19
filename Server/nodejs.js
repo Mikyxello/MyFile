@@ -16,26 +16,28 @@ app.get('/convert', function(req, res){
 
 	var result = convertion(pathfile, inputformat, inputfile, outputformat);
 	
-	console.log("FIN");
+	console.log(req.headers['x-forwarded-for'] || req.connection.remoteAddress);
+	res.send(result);
 });
 
 function convertion(pathfile, inputformat, inputfile, outputformat) {
-	var result = "Failed";
-	 
 	var fs = require('fs'),
     cloudconvert = new (require('cloudconvert'))('GOF05MzbYRdxGeKiQAzsdm968KU1-rV099JMD2oRMkjtFP4SZbggvhn4qjKKutxM2xUQGq0jm3sa6LXqW6BPUA');
- 
-	fs.createReadStream(inputfile)
-	.pipe(cloudconvert.convert({
-	"inputformat": inputformat,
-	"outputformat": outputformat,
-	"input": "upload",
-	"filename": inputfile,
-	"timeout": 10
-	}))
-	.pipe(fs.createWriteStream('converted.'+outputformat));
+ 	try {
+		fs.createReadStream(inputfile)
+		.pipe(cloudconvert.convert({
+		"inputformat": inputformat,
+		"outputformat": outputformat,
+		"input": "upload",
+		"filename": inputfile,
+		"timeout": 10
+		})).pipe(fs.createWriteStream(inputfile.substr(0, inputfile.lastIndexOf('.'))+outputformat));
 
-	return result;
+		return "Conversione di " + inputfile + "effettuata";
+	} catch(err){
+		return err.message;
+	}
+
 }
 
 app.listen("8080");
