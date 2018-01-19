@@ -3,9 +3,9 @@
 MyFile è un'applicazione web che si pone l'obbiettivo di fornire un servizio RESTful di conversione file collegato con le API di "Cloud Converter", permettendo la condivisione di file convertiti su un social network (acceduto tramite oAuth).
 
 ## Collaboratori
-*Michele Anselmi* @Mikyxello
-*Gianmarco Cariggi* @giacar
-*Riccardo Ceccarelli* @ricciricciard
+*Michele Anselmi* [@Mikyxello](https://github.com/Mikyxello)
+*Gianmarco Cariggi* [@giacar](https://github.com/giacar)
+*Riccardo Ceccarelli* [@ricciricciard](https://github.com/ricciricciard)
 
 ## CSS & JS Library
 * [Materialize](http://materializecss.com/)
@@ -15,13 +15,7 @@ MyFile è un'applicazione web che si pone l'obbiettivo di fornire un servizio RE
 * [Cloud Convert](https://cloudconvert.com/)
 
 ## License
-* Copyright <YEAR> <COPYRIGHT HOLDER>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+* This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
 # To Do
 ### Funzionalità da implementare
@@ -32,6 +26,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ## Bugs
 * Problema nell'upload del file da una posizione diversa della cartella dove è locato lo script (Server/nodejs.js)
+* Problema nel download del file, inserire wait per attendere la risposta (altrimenti si riceve l'alert del massimo numero di richieste concorrenti raggiunto)
 
 ### Done
 * <del>Starting website</del>
