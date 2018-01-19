@@ -66,18 +66,17 @@ function start(url, id, host, filename, outputformat, tmppath) {
 		method: "POST",
 		url: url,
 		data: '{\
-			"input": "download",\
+			"input": "upload",\
 			"file": "'+tmppath+'",\
 			"outputformat": "'+outputformat+'",\
 			"filename": "'+filename+'",\
 			"download": true,\
 			}',
-		success: function() {
+		success: function(data) {
 			/* DEBUG OUTPUT */
 			console.log("START SUCCESS");
 			/*--------------*/
-
-			status(url);
+			upload(url, id, host, data.upload.url, filename,tmppath);
 		},
 		error: function(xhr, status, error) {
 			/* DEBUG OUTPUT */
@@ -90,6 +89,42 @@ function start(url, id, host, filename, outputformat, tmppath) {
 	});
 }
 
+
+function upload(url, id, host, upload_url, filename, tmppath) {
+	/* DEBUG OUTPUT */
+	console.log("UPLOAD");
+	console.log("UPLOAD URL: " + upload_url)
+	/*--------------*/
+
+	aux_url = "https:"+upload_url+"/"+tmppath;
+
+	/* DEBUG OUTPUT */
+	console.log("URL UPLOAD COMPLETO: " + aux_url);
+	/*--------------*/
+
+	$.ajax({
+		method: "PUT",
+		url: aux_url,
+
+		success: function(data) {
+			/* DEBUG OUTPUT */
+			console.log("UPLOAD SUCCESS");
+			/*--------------*/
+
+			status(url);
+		},
+		error: function(xhr, status, error) {
+			/* DEBUG OUTPUT */
+			console.log("UPLOAD ERROR")
+			console.log("XHR: "+xhr);
+			console.log("STATUS: "+status);
+			console.log("ERROR: "+error);
+			/*--------------*/
+		}
+	});
+}
+
+/* CHECK STATUS OF CONVERTION */
 function status(url) {
 	/* DEBUG OUTPUT */
 	console.log("CONVERT");
@@ -108,14 +143,19 @@ function status(url) {
 			/*--------------*/
 
 			/* DEBUG OUTPUT */
-			console.log("CONVERT STEP: " + data.step);
+			console.log("DATA:");
+			console.log("ID: " + data.id);
+			console.log("URL: " + data.url);
+			console.log("PERCENT: " + data.percent + "%");
+			console.log("MESSAGE: " + data.message);
+			console.log("STEP: " + data.step);
 			/*--------------*/			
-
-			if(data.step == "wait") {
+			if(data.step == "input") {
 				/* DEBUG OUTPUT */
-				console.log("CONVERT WAITING");
+				console.log("CONVERT INPUT");
+				sleep(2000);
+				status(url);
 				/*--------------*/
-				setTimeout(status(url),5000);
 			}
 			else if(data.step == "convert") {
 				/* DEBUG OUTPUT */
@@ -129,11 +169,11 @@ function status(url) {
 				/*--------------*/
 				download(data.url);
 			}
-			else if(data.step == "input") {
+			else if(data.step == "wait") {
 				/* DEBUG OUTPUT */
-				console.log("CONVERT INPUT");
-				setTimeout(status(url),5000);
+				console.log("CONVERT WAITING");
 				/*--------------*/
+				setTimeout(status(url),5000);
 			}
 			else if(data.step == "output") {
 				/* DEBUG OUTPUT */
@@ -171,4 +211,14 @@ function download(url) {
 		method: "GET",
 		url: url
 	});
+}
+
+
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
 }

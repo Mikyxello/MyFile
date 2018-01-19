@@ -43,22 +43,32 @@
 
 	<div class="main_container">
 		<div class="container">
-			<div class="form_container">
+			<form class="form_container" method="GET" action="http://127.0.0.1:8080/convert" name="convertion_body">
 				<div class="file-field input-field">
 					<div class="btn">
 						<span>File</span>
-						<input type="hidden" id="tmppath" name="tmppath">
-						<input type="file" id="selectedfile" name="selectedfile">
+						<input type="hidden" id="pathfile" name="pathfile">
+						<input type="file" id="inputfile" name="inputfile">
 					</div>
 					<div class="file-path-wrapper">
 						<input class="file-path validate" type="text" id="filename" name="filename">
+						<input type="hidden" name="inputformat" id="inputformat">
 					</div>
+					<script>
+						$(document).ready(function(){
+							$("#filename").on("change", function() {
+								$("#inputformat").val($("#filename").val().split('.').pop());
+							});
+
+							$('#inputfile').on("change", function(event) {
+								var pathfile = URL.createObjectURL(event.target.files[0]);
+								$("#pathfile").val(pathfile);
+							});
+						});
+					</script>
 				</div>
 				<script>
-					$('#selectedfile').change( function(event) {
-						var tmppath = URL.createObjectURL(event.target.files[0]);
-						$("#tmppath").val(tmppath);
-					});
+					
 				</script>
 				<div class="input-field col s12 m6">
 					<select class="icons" name="outputformat" id="outputformat">
@@ -76,12 +86,15 @@
 					});
 				</script>
 				<div class="input-field col s12 m6" style="text-align: center !important;">
+					<input type="submit" name="submit" id="submit" value="Converti">
+					<!--
 					<button class="btn waves-effect waves-light" name="action" onclick="create()">Converti
 						<i class="fa fa-file" aria-hidden="true"></i>
 					</button>
+					-->
 				</div>
 				<br><br><br><br><br>
-			</div>
+			</form>
 		</div>
 	</div>
 
@@ -97,7 +110,10 @@
               	<div class="col l4 offset-l2 s12">
                 	<h5 class="white-text">Link utili</h5>
                 	<ul>
-	                	<li><a class="grey-text text-lighten-3" href="#">Link</a></li>
+	                	<li><a class="grey-text text-lighten-3" href="https://www.facebook.com/"><i class="fa fa-facebook-official" aria-hidden="true"></i> Facebook</a></li>
+	                	<li><a class="grey-text text-lighten-3" href="https://plus.google.com/"><i class="fa fa-google-plus-official" aria-hidden="true"></i> Google Plus</a></li>
+	                	<li><a class="grey-text text-lighten-3" href="https://twitter.com/"><i class="fa fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+	                	<li><a class="grey-text text-lighten-3" href="https://it.linkedin.com/"><i class="fa fa-linkedin-square" aria-hidden="true"></i> LinkedIn</a></li>
                 	</ul>
               	</div>
             </div>
