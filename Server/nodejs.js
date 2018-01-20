@@ -18,6 +18,7 @@ app.get('/convert', function(req, res){
 	
 	console.log(req.headers['x-forwarded-for'] || req.connection.remoteAddress);
 	res.send(result);
+	//res.redirect('/');
 });
 
 function convertion(pathfile, inputformat, inputfile, outputformat) {
@@ -31,9 +32,9 @@ function convertion(pathfile, inputformat, inputfile, outputformat) {
 		"input": "upload",
 		"filename": inputfile,
 		"timeout": 10
-		})).pipe(fs.createWriteStream(inputfile.substr(0, inputfile.lastIndexOf('.'))+outputformat));
+		})).pipe(fs.createWriteStream(inputfile.substr(0, inputfile.lastIndexOf('.'))+"."+outputformat));
 
-		return "Conversione di " + inputfile + "effettuata";
+		return "Conversione di " + inputfile + "in " + inputfile.substr(0, inputfile.lastIndexOf('.'))+"."+outputformat + " effettuata";
 	} catch(err){
 		return err.message;
 	}
@@ -41,3 +42,24 @@ function convertion(pathfile, inputformat, inputfile, outputformat) {
 }
 
 app.listen("8080");
+
+
+/*
+
+OAUTH, vedi Credential.json
+
+var GoogleAuth = require('google-auth-library');
+var auth = new GoogleAuth;
+var client = new auth.OAuth2(CLIENT_ID, '', '');
+client.verifyIdToken(
+    token,
+    CLIENT_ID,
+    // Or, if multiple clients access the backend:
+    //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3],
+    function(e, login) {
+      var payload = login.getPayload();
+      var userid = payload['sub'];
+      // If request specified a G Suite domain:
+      //var domain = payload['hd'];
+    });
+*/

@@ -35,6 +35,21 @@ html,body {
 	visibility: hidden;
 }
 
-.footer-copyright > a {
-	color: grey;
+.footer-copyright a {
+	color: #000000;
+}
+.footer-copyright a:hover {
+	color: #5b5b5b;
+}
+.facebook-link {
+	color: #4267B2;
+}
+.twitter-link {
+	color: #1DA1F2;
+}
+.google-plus-link {
+	color: #DB4437;
+}
+.linkedin-link {
+	color: #283E4A;
 }
