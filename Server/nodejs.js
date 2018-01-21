@@ -47,15 +47,13 @@ app.listen("8080");
 /*
 
 OAUTH, vedi Credential.json
-
+var CLIENT_ID = 994040047931-omd8db1opge95bdvlbb93nhtki48kqro.apps.googleusercontent.com
 var GoogleAuth = require('google-auth-library');
 var auth = new GoogleAuth;
 var client = new auth.OAuth2(CLIENT_ID, '', '');
 client.verifyIdToken(
     token,
     CLIENT_ID,
-    // Or, if multiple clients access the backend:
-    //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3],
     function(e, login) {
       var payload = login.getPayload();
       var userid = payload['sub'];
