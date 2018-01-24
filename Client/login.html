@@ -5,14 +5,14 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	<meta charset="utf-8">
 	<!-- GOOGLE META -->
-	<meta name="google-signin-client_id" content="994040047931-omd8db1opge95bdvlbb93nhtki48kqro.apps.googleusercontent.com">
+	<meta name="google-signin-client_id" content="994040047931-8gd198l125ri5pahsrrgarbl5fhqsdje.apps.googleusercontent.com">
 
 	<title>MyFile | Home</title>
 
 	<!-- Import Google Icon Font -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Import jQuery -->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!-- RALEWAY FONT -->
   	<link href="https://fonts.googleapis.com/css?family=Raleway:600" rel="stylesheet">
     <!-- Favicon -->
@@ -37,34 +37,70 @@
 			<div class="nav-wrapper">
 				<a href="index.html" class="brand-logo"><img src="img/logo-file-256x256.png" class="responsive" height="100%" width="50%" alt=""></a>
 				<ul class="right hide-on-med-and-down">
+					<li class="profile_name_li" style="visibility: hidden; display: none;"></li>
+					<li class="profile_image_li" style="visibility: hidden; display: none;"></li>
 					<li><a href="index.html">MyFile</a></li>
 					<li><a href="converter.html">Converti File</a></li>
 					<li><a href="team.html">Il nostro team</a></li>
-					<li><a href="#">Login</a></li>
+					<li class="login_li"><a href="#">Login</a></li>
+					<li class="logout_li" style="visibility: hidden; display: none;"><a href="#" onclick="signOut();">Sign out</a></li>
 				</ul>
 			</div>
 		</nav>
 	</div>
 
-	<h1 class="center">Accedi</h1>
+	<h1 class="center login_title">Accedi</h1>
 
 	<div class="main_container">
 		<div class="container">
 
 			<!-- GOOGLE OAUTH -->
 
-			<table border="0">
+			<table border="0" class="table_login">
 				<tr><td>Accedi con Google:</td><td style="float: left;"><div class="g-signin2" data-onsuccess="onSignIn"></div></td></tr>
 			</table>
+
+			<table border="0" class="table_user" style="visibility: hidden; display: none;">
+				<tr>
+					<td class="user_image"></td>
+					<td class="user_name"></td>
+				</tr>
+				<tr>
+					<td colspan="2" class="user_email"></td>
+			</table>
+
 			<script>
 				function onSignIn(googleUser) {
 					var profile = googleUser.getBasicProfile();
 					console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-					console.log('Name: ' + profile.getName());
-					console.log('Image URL: ' + profile.getImageUrl());
-					console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-				}
+					var user = profile.getName();
+					var image = profile.getImageUrl();
+					var mail = profile.getEmail(); // This is null if the 'email' scope is not present.
 
+					$(".table_login, .login_li").css({"display":"none", "visibility":"hidden"});
+					$(".logout_li, .profile_name_li, .profile_image_li, .table_user").css({"display":"", "visibility":""});
+
+					$(".profile_image_li").html("<img src=\""+image+"\" height=\"60px\" width=\"60px\"> ");
+					$(".profile_name_li").html(user + " ");
+
+					$(".user_image").html("<img src=\""+image+"\">");
+					$(".user_name").html(user);
+					$(".user_email").html("<a href=\""+mail+"\">" + mail + "</a>");
+					$(".login_title").html("Benvenuto " + user.substr(0, user.lastIndexOf(' ')));
+				}
+			</script>
+
+			<script>
+			  function signOut() {
+			    var auth2 = gapi.auth2.getAuthInstance();
+			    auth2.signOut().then(function () {
+			      console.log('User signed out.');
+			    });
+
+			    $(".table_login, .login_li").css({"display":"", "visibility":""});
+			    $(".logout_li, .profile_image_li, .profile_name_li, .table_user").css({"display":"none", "visibility":"visible"});
+			    $(".login_title").html("Accedi");
+			  }
 			</script>
 		</div>
 	</div>
@@ -91,7 +127,7 @@
 		</div>
 		<div class="footer-copyright">
 			<div class="container">
-				© 2014 Copyright MyFile - <a href="https://github.com/Mikyxello">M. Anselmi</a> / <a href="https://github.com/ricciricciard">R. Ceccarelli</a> / <a href="https://github.com/giacar">G. Cariggi</a>
+				© 2018 Copyright MyFile - <a href="https://github.com/Mikyxello">M. Anselmi</a> / <a href="https://github.com/ricciricciard">R. Ceccarelli</a> / <a href="https://github.com/giacar">G. Cariggi</a>
             </div>
 		</div>
     </div>
