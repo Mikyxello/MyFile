@@ -3,6 +3,8 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var url = require('url');
 var http = require('http');
+var amqp =  require('amqplib/callback_api');
+
 
 var app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -13,13 +15,36 @@ app.get('/convert', function(req, res){
 	var inputformat = req.query.inputformat;
 	var inputfile = req.query.inputfile;
 	var outputformat = req.query.outputformat;
+	
 
+	log(inputformat,outputformat,0);
 	var result = convertion(pathfile, inputformat, inputfile, outputformat);
 	
 	console.log(req.headers['x-forwarded-for'] || req.connection.remoteAddress);
 	res.send(result);
+	log(inputformat,outputformat,1);
 	//res.redirect('/');
 });
+
+function log(inputformat,outputformat,status) {
+	amqp.connect('amqp://localhost', function(err, conn) {
+		conn.createChannel(function(err, ch) {
+		var q = 'logger';
+
+		ch.assertQueue(q, {durable: false});
+		if (status==0){
+			var msg="richiesta di conversione da "+inputformat+" a "+outputformat+" ricevuta";
+		}
+		if (status==1){
+			var msg="conferma conversione da "+inputformat+" a "+outputformat+" completata";
+		}
+		
+		ch.sendToQueue(q, new Buffer(msg));
+		console.log("messaggio inviato");
+		});
+	});
+};
+
 
 function convertion(pathfile, inputformat, inputfile, outputformat) {
 	var fs = require('fs'),

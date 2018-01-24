@@ -7,6 +7,7 @@ npm install body-parser
 npm install querystring
 npm install google-auth-library
 npm install url
+npm install amqplib
 
 ----- Execute server -----
 node nodejs.js
