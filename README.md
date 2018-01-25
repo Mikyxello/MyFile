@@ -11,22 +11,27 @@ MyFile è un'applicazione web che si pone l'obbiettivo di fornire un servizio RE
 * [Materialize](http://materializecss.com/)
 * [Bootstrap](https://getbootstrap.com/)
 
-## API Reference
+## API Reference & Others
 * [Cloud Convert](https://cloudconvert.com/)
+* [Google Drive](https://developers.google.com/drive/)
+* [RabbitMQ](https://www.rabbitmq.com/)
 
 ## License
 * This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
 # To Do
 ### Funzionalità da implementare
-* Pagina HTML per il login (tramite [oAuth](http://www.passportjs.org/))
-* Pagina HTML per la conversione dei file (inserimento file, scelta del tipo di conversione basato sull'estensione del file in input, submit del form)
-* Server JS (basato sulla tecnologia [NodeJS](https://nodejs.org/en/)) che raccoglie i dati inviati dalla form HTML, effettua la richiesta a Cloud Convert per la conversione e richiedere l'autorizzazione con oAuth al social network per pubblicare l'eventuale file convertito
-* Gestire la grafica HTML con il pacchetto Materialize (o Bootstrap)
+* Richiedere l'autorizzazione per pubblicare il file convertito su <b>Google Drive</b>
+* Una volta effettuata la richiesta dal client, ricevere redirect su pagina con pulsante di download (che accede al link ricevuto dalla conversione)
 
 ## Bugs
 * Problema nell'upload del file da una posizione diversa della cartella dove è locato lo script (Server/nodejs.js)
-* Problema nel download del file, inserire wait per attendere la risposta (altrimenti si riceve l'alert del massimo numero di richieste concorrenti raggiunto)
+* Problema nel download del file, non salvare il file convertito nel server ma inviare il link per il download al client
 
 ### Done
 * <del>Starting website</del>
+* <del>Pagina HTML per il login (tramite [oAuth Google](https://developers.google.com/identity/protocols/OAuth2))</del>
+* <del>Server JS in localhost (basato sulla tecnologia [NodeJS](https://nodejs.org/en/)) che raccoglie i dati inviati dalla form HTML ed effettua la richiesta a Cloud Convert per la conversione</del>
+* <del>Gestire la grafica HTML con il pacchetto <b>Materialize</b></del>
+* <del>Pagina HTML per la conversione dei file (inserimento file, scelta del tipo di conversione basato sull'estensione del file in input, submit del form)</del>
+* <del>Loggin su server RabbitMQ tramite protocollo AMQP</del>

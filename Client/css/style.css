@@ -41,15 +41,37 @@ html,body {
 .footer-copyright a:hover {
 	color: #5b5b5b;
 }
+
+
 .facebook-link {
-	color: #4267B2;
+	color: #FFFFFF;
+	border-radius: 10px;
+	padding: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	background-color: #4267B2;
 }
 .twitter-link {
-	color: #1DA1F2;
+	color: #FFFFFF;
+	border-radius: 10px;
+	padding: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	background-color: #1DA1F2;
 }
 .google-plus-link {
-	color: #DB4437;
+	color: #FFFFFF;
+	border-radius: 10px;
+	padding: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	background-color: #DB4437;
 }
 .linkedin-link {
-	color: #283E4A;
+	color: #FFFFFF;
+	border-radius: 10px;
+	padding: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	background-color: #283E4A;
 }
