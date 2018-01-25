@@ -22,6 +22,7 @@ app.get('/convert', function(req, res){
 	
 	console.log(req.headers['x-forwarded-for'] || req.connection.remoteAddress);
 	res.send(result);
+	//res.download(__dirname+"/"+inputfile.substr(0, inputfile.lastIndexOf('.'))+"."+outputformat,inputfile.substr(0, inputfile.lastIndexOf('.'))+"."+outputformat);
 	log(inputformat,outputformat,1);
 	//res.redirect('/');
 });
@@ -29,9 +30,9 @@ app.get('/convert', function(req, res){
 function log(inputformat,outputformat,status) {
 	amqp.connect('amqp://localhost', function(err, conn) {
 		conn.createChannel(function(err, ch) {
-		var q = 'logger';
-
-		ch.assertQueue(q, {durable: false});
+		var ex = 'logger';
+		
+		ch.assertExchange(ex, 'fanout', {durable: false});
 		if (status==0){
 			var msg="richiesta di conversione da "+inputformat+" a "+outputformat+" ricevuta";
 		}
@@ -39,7 +40,7 @@ function log(inputformat,outputformat,status) {
 			var msg="conferma conversione da "+inputformat+" a "+outputformat+" completata";
 		}
 		
-		ch.sendToQueue(q, new Buffer(msg));
+		ch.publish(ex, '', new Buffer(msg));
 		console.log("messaggio inviato");
 		});
 	});
