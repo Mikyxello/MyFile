@@ -45,7 +45,7 @@
 
 	<div class="main_container">
 		<div class="container">
-			<form class="form_container" method="GET" action="http://127.0.0.1:8080/convert" name="convertion_body">
+			<form class="form_container" method="GET" action="" name="convertion_body">
 				<div class="file-field input-field">
 					<div class="btn">
 						<span>File</span>
@@ -69,8 +69,30 @@
 						});
 					</script>
 				</div>
+				<!-- Funzione di Invio e Ricezione con WebSocket -->
 				<script>
-					
+					function reqConv() {
+						var webSocket = require('ws');
+						var wss = new WebSocket('ws://127.0.0.1:8080');
+						
+						wss.on('connection', function connection(ws) {
+							var mex = { pathfile : document.convertion_body.pathfile,
+										inputformat : document.convertion_body.inputformat,
+										inputfile : document.convertion_body.inputfile,
+										outputformat : document.convertion_body.outputformat }
+							
+							ws.send(JSON.stringify(mex));
+							
+							ws.on('message', function incoming(message) {
+								var file = JSON.parse(message);
+								// Gestione Download file ancora non completata
+							});
+							
+							ws.on('close', function closing() {
+								ws.terminate();
+							});
+						});
+					}
 				</script>
 				<div class="input-field col s12 m6">
 					<select class="icons" name="outputformat" id="outputformat">
@@ -89,7 +111,8 @@
 				</script>
 				<div class="input-field col s12 m6" style="text-align: center !important;">
 
-					<button class="btn waves-effect waves-light" name="submit">Converti
+																			<!-- Aggiunta chiamata a funzione -->
+					<button class="btn waves-effect waves-light" name="submit" onClick = "reqConv();">Converti
 						<i class="fa fa-file" aria-hidden="true"></i>
 					</button>
 				</div>

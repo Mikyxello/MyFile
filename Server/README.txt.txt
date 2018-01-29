@@ -8,6 +8,7 @@ npm install querystring
 npm install google-auth-library
 npm install url
 npm install amqplib
+npm install ws
 
 ----- Execute server -----
 node nodejs.js
