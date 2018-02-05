@@ -4,32 +4,30 @@ var bodyParser = require('body-parser');
 var url = require('url');
 var http = require('http');
 var amqp =  require('amqplib/callback_api');
-var webSocket = require('ws');
-
-
+var WebSocket = require('ws');
 var app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 
 /* Receiving HTTP message via express node module*/
 app.get('/convert', function(req, res){
 
+	res.redirect("http://localhost/MyFile/Client/converter.html");
+
 	var pathfile = req.query.pathfile;
 	var inputformat = req.query.inputformat;
 	var inputfile = req.query.inputfile;
 	var outputformat = req.query.outputformat;
-	
 
-	log(inputformat,outputformat,0);
+	console.log("[IP]" + (req.headers['x-forwarded-for'] || req.connection.remoteAddress));
+
 	var result = convertion(pathfile, inputformat, inputfile, outputformat);
-	
-	console.log(req.headers['x-forwarded-for'] || req.connection.remoteAddress);
+
 	res.send(result);
-	log(inputformat,outputformat,1);
 });
 
 
 /* Logging via AMQP on RabbitMQ */
-function log(inputformat,outputformat,status) {
+function log(string) {
 	amqp.connect('amqp://localhost', function(err, conn) {
 		conn.createChannel(function(err, ch) {
 		var ex = 'logger';
@@ -37,12 +35,8 @@ function log(inputformat,outputformat,status) {
 		var msg = "";
 
 		ch.assertExchange(ex, 'fanout', {durable: false});
-		if (status==0){
-			msg="[REQUEST] for convertion from "+inputformat+" to "+outputformat+" log";
-		}
-		if (status==1){
-			msg="[SUCCESS] for convertion from "+inputformat+" to "+outputformat+" log";
-		}
+
+		msg = "[LOG]" + string;
 		
 		ch.publish(ex, '', new Buffer(msg));
 		console.log(msg);
@@ -52,6 +46,10 @@ function log(inputformat,outputformat,status) {
 
 /* Using CloudConvert API */
 function convertion(pathfile, inputformat, inputfile, outputformat) {
+	var ret_string = "Conversion from " + inputfile + " to " + inputfile.substr(0, inputfile.lastIndexOf('.'))+"."+outputformat;
+
+	log("[REQUEST]"+ret_string);
+
 	var fs = require('fs'),
     cloudconvert = new (require('cloudconvert'))('GOF05MzbYRdxGeKiQAzsdm968KU1-rV099JMD2oRMkjtFP4SZbggvhn4qjKKutxM2xUQGq0jm3sa6LXqW6BPUA');
  	try {
@@ -62,57 +60,50 @@ function convertion(pathfile, inputformat, inputfile, outputformat) {
 		"input": "upload",
 		"filename": inputfile,
 		"timeout": 10
-		})).pipe(fs.createWriteStream(inputfile.substr(0, inputfile.lastIndexOf('.'))+"."+outputformat));
+		})).on('error', function(e){log("[ERROR] " + e)})
+		.pipe(fs.createWriteStream(inputfile.substr(0, inputfile.lastIndexOf('.'))+"."+outputformat)).on('error', function(e){log("[ERROR] " + e)});
 
+		log("[SUCCESS]"+ret_string);
 
-		var ret_string = "Conversione di " + inputfile + "in " + inputfile.substr(0, inputfile.lastIndexOf('.'))+"."+outputformat + " effettuata";
-		console.log(ret_string);
 		return ret_string;
 	} catch(err){
-		console.log(err.message);
+		log("[ERROR]"+err.message);
 		return err.message;
 	}
-
 }
 
-app.listen("8080");
-
 /* Metodo con WebSocket */
-
-/*
-var active_connection = null;
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
+var active_connection = null;
 
 wss.on('connection', function connection(ws, req) {
+
 	const location = url.parse(req.url, true);
-
-	var obj_mes = JSON.parse(message);
-		
-	var pathfile = obj_mes.query.pathfile;
-	var inputformat = obj_mes.query.inputformat;
-	var inputfile = obj_mes.query.inputfile;
-	var outputformat = obj_mes.query.outputformat; 
-	
-	log(inputformat,outputformat,0);
-	var result = convertion(pathfile, inputformat, inputfile, outputformat);
-
-	console.log(req.headers['x-forwarded-for'] || req.connection.remoteAddress);
-
 	active_connection = ws;
-	ws.send(JSON.stringify(result));
+
+	var result = "";
 
 	ws.on('message', function incoming(message) {
-    	console.log('received: %s', message);
+
+		var json_message = JSON.parse(message);
+
+		var pathfile = json_message.pathfile;
+		var inputformat = json_message.inputformat;
+		var inputfile = json_message.inputfile;
+		var outputformat = json_message.outputformat;
+
+		console.log("[IP]" + (req.headers['x-forwarded-for'] || req.connection.remoteAddress));
+
+		result = convertion(pathfile, inputformat, inputfile, outputformat);
 	});
 	
+	ws.send(result);
 });
 
 server.listen(8080, function listening() {
-  console.log('Listening on %d', server.address().port);
+  console.log('[SERVER] Listening on %d', server.address().port);
 });
-*/
-
 
 /*
 OAUTH, vedi Credential.json

@@ -84,13 +84,18 @@
 					<label>Converti in</label>
 				</div>
 				<div class="input-field col s12 m6" style="text-align: center !important;">
-					<button class="btn waves-effect waves-light" name="submit" onclick="">Converti
+					<button class="btn waves-effect waves-light" name="submit">Converti (via express)
 						<i class="fa fa-file" aria-hidden="true"></i>
 					</button>
 				</div>
-				<div class="g-signin2" style="visibility: hidden;" data-onsuccess="onSignIn"></div>
-				<br><br><br><br><br>
 			</form>
+			<div class="input-field col s12 m6" style="text-align: center !important;">
+				<button class="btn waves-effect waves-light" name="wsConnect" onclick="wsConnect()">Converti (via WebSocket)
+					<i class="fa fa-file" aria-hidden="true"></i>
+				</button>
+			</div>
+			<div class="g-signin2" style="visibility: hidden;" data-onsuccess="onSignIn"></div>
+			<br><br><br><br><br>
 		</div>
 	</div>
 
@@ -137,31 +142,33 @@
 	</script>
 
 	<script>
-		function onSignIn(googleUser) {
-			var profile = googleUser.getBasicProfile();
-			console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-			var user = profile.getName();
-			var image = profile.getImageUrl();
-			var mail = profile.getEmail(); // This is null if the 'email' scope is not present.
+		$(document).ready(function() {
+			function onSignIn(googleUser) {
+				var profile = googleUser.getBasicProfile();
+				console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+				var user = profile.getName();
+				var image = profile.getImageUrl();
+				var mail = profile.getEmail(); // This is null if the 'email' scope is not present.
 
-			$(".login_li, .g-signin2").css({"display":"none", "visibility":"hidden"});
-			$(".profile_image_li").html("<img src=\""+image+"\" height=\"60px\" width=\"60px\"> ");
-			$(".profile_name_li").html(user + " ");
-			$(".logout_li, .profile_name_li, .profile_image_li").css({"display":"", "visibility":""});
+				$(".login_li, .g-signin2").css({"display":"none", "visibility":"hidden"});
+				$(".profile_image_li").html("<img src=\""+image+"\" height=\"60px\" width=\"60px\"> ");
+				$(".profile_name_li").html(user + " ");
+				$(".logout_li, .profile_name_li, .profile_image_li").css({"display":"", "visibility":""});
 
-			$(".user_image").html("<img src=\""+image+"\">");
-			$(".user_name").html(user);
-			$(".user_email").html("<a href=\""+mail+"\">" + mail + "</a>");
-		}
-				
-		function signOut() {
-			var auth2 = gapi.auth2.getAuthInstance();
-			auth2.signOut().then(function () {
-				console.log('User signed out.');
-			});
+				$(".user_image").html("<img src=\""+image+"\">");
+				$(".user_name").html(user);
+				$(".user_email").html("<a href=\""+mail+"\">" + mail + "</a>");
+			}
+					
+			function signOut() {
+				var auth2 = gapi.auth2.getAuthInstance();
+				auth2.signOut().then(function () {
+					console.log('User signed out.');
+				});
 				$(".login_li").css({"display":"", "visibility":""});
-			    $(".logout_li, .profile_image_li, .profile_name_li").css({"display":"none", "visibility":"visible"});
-		}
+				$(".logout_li, .profile_image_li, .profile_name_li").css({"display":"none", "visibility":"visible"});
+			}
+		});
 	</script>
 	
 </body>
