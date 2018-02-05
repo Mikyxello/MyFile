@@ -26,6 +26,7 @@
 
     <!-- Google API -->
     <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://apis.google.com/js/client:platform.js" async defer></script>
 
 	<!-- Import Materialize Library from CDNs -->
   	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
@@ -88,9 +89,7 @@
 					$(".user_email").html("<a href=\""+mail+"\">" + mail + "</a>");
 					$(".login_title").html("Benvenuto " + user.substr(0, user.lastIndexOf(' ')));
 				}
-			</script>
 
-			<script>
 			  function signOut() {
 			    var auth2 = gapi.auth2.getAuthInstance();
 			    auth2.signOut().then(function () {

@@ -1,6 +1,6 @@
 # MyFile
 ## Descrizione
-MyFile è un'applicazione web che si pone l'obbiettivo di fornire un servizio RESTful di conversione file collegato con le API di "Cloud Converter", permettendo la condivisione di file convertiti su un social network (acceduto tramite oAuth).
+MyFile è un'applicazione web che si pone l'obbiettivo di fornire un servizio RESTful di conversione file collegato con le API di "Cloud Converter"
 
 ## Collaboratori
 *Michele Anselmi* [@Mikyxello](https://github.com/Mikyxello)
@@ -13,7 +13,6 @@ MyFile è un'applicazione web che si pone l'obbiettivo di fornire un servizio RE
 
 ## API Reference & Others
 * [Cloud Convert](https://cloudconvert.com/)
-* [Google Drive](https://developers.google.com/drive/)
 * [RabbitMQ](https://www.rabbitmq.com/)
 
 ## License
@@ -21,8 +20,9 @@ MyFile è un'applicazione web che si pone l'obbiettivo di fornire un servizio RE
 
 # To Do
 ### Funzionalità da implementare
-* Richiedere l'autorizzazione per pubblicare il file convertito su <b>Google Drive</b>
 * Una volta effettuata la richiesta dal client, ricevere redirect su pagina con pulsante di download (che accede al link ricevuto dalla conversione)
+* Modificare oAuth per effettuarlo in server
+* Cambiare API al posto di Google Drive
 
 ## Bugs
 * Problema nell'upload del file da una posizione diversa della cartella dove è locato lo script (Server/nodejs.js)
