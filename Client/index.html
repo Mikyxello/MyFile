@@ -5,6 +5,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	<meta charset="utf-8">
 
+	<!-- GOOGLE META -->
+	<meta name="google-signin-client_id" content="994040047931-8gd198l125ri5pahsrrgarbl5fhqsdje.apps.googleusercontent.com">
+
 	<title>MyFile | Home</title>
 
 	<!-- Import Google Icon Font -->
@@ -18,9 +21,13 @@
     <!-- FontAwesome -->
     <script src="https://use.fontawesome.com/c761b0c982.js"></script>
 
-    <!-- Our CSS/JS -->
-    <link rel="stylesheet" type="text/css" href="css\style.css">
-    <script type="text/javascript" src="js\scripts.js"></script>
+	<!-- Our CSS/JS -->
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+	<script type="text/javascript" src="js/scripts.js"></script>
+
+    <!-- Google API -->
+	<script src="https://apis.google.com/js/platform.js" async defer></script>
+	<script src="https://apis.google.com/js/client:platform.js" async defer></script>
 
 	<!-- Import Materialize Library from CDNs -->
   	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
@@ -32,10 +39,13 @@
 			<div class="nav-wrapper">
 				<a href="index.html" class="brand-logo"><img src="img/logo-file-256x256.png" class="responsive" height="100%" width="50%" alt=""></a>
 				<ul class="right hide-on-med-and-down">
+					<li class="profile_name_li" style="visibility: hidden; display: none;"></li>
+					<li class="profile_image_li" style="visibility: hidden; display: none;"></li>
 					<li><a href="#">MyFile</a></li>
 					<li><a href="converter.html">Converti File</a></li>
 					<li><a href="team.html">Il nostro team</a></li>
-					<li><a href="login.html">Login</a></li>
+					<li class="login_li"><a href="login.html">Login</a></li>
+					<li class="logout_li" style="visibility: hidden; display: none;"><a href="#" onclick="signOut();">Sign out</a></li>
 				</ul>
 			</div>
 		</nav>

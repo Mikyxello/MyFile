@@ -5,6 +5,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	<meta charset="utf-8">
 
+	<!-- GOOGLE META -->
+	<meta name="google-signin-client_id" content="994040047931-8gd198l125ri5pahsrrgarbl5fhqsdje.apps.googleusercontent.com">
+
 	<title>MyFile | Team</title>
 
 	<!-- Import Google Icon Font -->
@@ -19,8 +22,12 @@
     <script src="https://use.fontawesome.com/c761b0c982.js"></script>
 
     <!-- Our CSS/JS -->
-    <link rel="stylesheet" type="text/css" href="css\style.css">
-    <script type="text/javascript" src="js\scripts.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+	<script type="text/javascript" src="js/scripts.js"></script>
+
+    <!-- Google API -->
+	<script src="https://apis.google.com/js/platform.js" async defer></script>
+	<script src="https://apis.google.com/js/client:platform.js" async defer></script>
 
 	<!-- Import Materialize Library from CDNs -->
   	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
@@ -32,10 +39,13 @@
 			<div class="nav-wrapper">
 				<a href="index.html" class="brand-logo"><img src="img/logo-file-256x256.png" class="responsive" height="100%" width="50%" alt=""></a>
 				<ul class="right hide-on-med-and-down">
+					<li class="profile_name_li" style="visibility: hidden; display: none;"></li>
+					<li class="profile_image_li" style="visibility: hidden; display: none;"></li>
 					<li><a href="index.html">MyFile</a></li>
 					<li><a href="converter.html">Converti File</a></li>
 					<li><a href="#">Il nostro team</a></li>
-					<li><a href="login.html">Login</a></li>
+					<li class="login_li"><a href="login.html">Login</a></div></li>
+					<li class="logout_li" style="visibility: hidden; display: none;"><a href="#" onclick="signOut();">Sign out</a></li>
 				</ul>
 			</div>
 		</nav>
@@ -44,51 +54,51 @@
 	<h1 class="center">Il nostro team</h1>
 
 	<div style="background-color: #f2b0b3;">
-	<div class="main_container" style="background-color: #f2b0b3;">
-		<div class="container">
-			<div class="row">
-				<div class="col s12 m7">
-					<div class="card">
-						<div class="card-image">
-							<img src="img/team/mikyxello.jpg">
-							<span class="card-title">Michele Anselmi</span>
-						</div>
-						<div class="card-content">
-						<p>Started coding at 15 years old. Graduating in computer engineering at <a href="https://www.uniroma1.it/">"La Sapienza" Università degli Studi di Roma</a></p>
-						</div>
-						
-						<div class="card-action">
-							<a href="https://github.com/Mikyxello" target="_blank">@Mikyxello</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	</div>
-	
-	
-		<div class="main_container">
+		<div class="main_container" style="background-color: #f2b0b3;">
 			<div class="container">
-				<div class="row" style="float: right !important;">
-					<div class="col s12 m7" style="float: right !important;">
+				<div class="row">
+					<div class="col s12 m7">
 						<div class="card">
 							<div class="card-image">
-								<img src="img/team/giacar.jpg">
-								<span class="card-title">Gianmarco Cariggi</span>
+								<img src="img/team/mikyxello.jpg">
+								<span class="card-title">Michele Anselmi</span>
 							</div>
 							<div class="card-content">
-							<p>Graduating in computer engineering at <a href="https://www.uniroma1.it/">"La Sapienza" Università degli Studi di Roma</a></p>
+							<p>Started coding at 15 years old. Graduating in computer engineering at <a href="https://www.uniroma1.it/">"La Sapienza" Università degli Studi di Roma</a></p>
 							</div>
 							
 							<div class="card-action">
-								<a href="https://github.com/giacar" target="_blank">@giacar</a>
+								<a href="https://github.com/Mikyxello" target="_blank">@Mikyxello</a>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
+	
+	
+	<div class="main_container">
+		<div class="container">
+			<div class="row" style="float: right !important;">
+				<div class="col s12 m7" style="float: right !important;">
+					<div class="card">
+						<div class="card-image">
+							<img src="img/team/giacar.jpg">
+							<span class="card-title">Gianmarco Cariggi</span>
+						</div>
+						<div class="card-content">
+						<p>Graduating in computer engineering at <a href="https://www.uniroma1.it/">"La Sapienza" Università degli Studi di Roma</a></p>
+						</div>
+						
+						<div class="card-action">
+							<a href="https://github.com/giacar" target="_blank">@giacar</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
 
 	<div style="background-color: #f2b0b3;">

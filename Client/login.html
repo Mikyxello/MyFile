@@ -4,6 +4,7 @@
 	<meta author="Michele Anselmi, Gianmarco Cariggi, Riccardo Ceccarelli">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	<meta charset="utf-8">
+
 	<!-- GOOGLE META -->
 	<meta name="google-signin-client_id" content="994040047931-8gd198l125ri5pahsrrgarbl5fhqsdje.apps.googleusercontent.com">
 
@@ -21,12 +22,12 @@
     <script src="https://use.fontawesome.com/c761b0c982.js"></script>
 
     <!-- Our CSS/JS -->
-    <link rel="stylesheet" type="text/css" href="css\style.css">
-    <script type="text/javascript" src="js\scripts.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+	<script type="text/javascript" src="js/scripts.js"></script>
 
-    <!-- Google API -->
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <script src="https://apis.google.com/js/client:platform.js" async defer></script>
+	<!-- Google API -->
+	<script src="https://apis.google.com/js/platform.js" async defer></script>
+	<script src="https://apis.google.com/js/client:platform.js" async defer></script>
 
 	<!-- Import Materialize Library from CDNs -->
   	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
@@ -70,37 +71,6 @@
 					<td colspan="2" class="user_email"></td>
 			</table>
 
-			<script>
-				function onSignIn(googleUser) {
-					var profile = googleUser.getBasicProfile();
-					console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-					var user = profile.getName();
-					var image = profile.getImageUrl();
-					var mail = profile.getEmail(); // This is null if the 'email' scope is not present.
-
-					$(".table_login, .login_li").css({"display":"none", "visibility":"hidden"});
-					$(".logout_li, .profile_name_li, .profile_image_li, .table_user").css({"display":"", "visibility":""});
-
-					$(".profile_image_li").html("<img src=\""+image+"\" height=\"60px\" width=\"60px\"> ");
-					$(".profile_name_li").html(user + " ");
-
-					$(".user_image").html("<img src=\""+image+"\">");
-					$(".user_name").html(user);
-					$(".user_email").html("<a href=\""+mail+"\">" + mail + "</a>");
-					$(".login_title").html("Benvenuto " + user.substr(0, user.lastIndexOf(' ')));
-				}
-
-			  function signOut() {
-			    var auth2 = gapi.auth2.getAuthInstance();
-			    auth2.signOut().then(function () {
-			      console.log('User signed out.');
-			    });
-
-			    $(".table_login, .login_li").css({"display":"", "visibility":""});
-			    $(".logout_li, .profile_image_li, .profile_name_li, .table_user").css({"display":"none", "visibility":"visible"});
-			    $(".login_title").html("Accedi");
-			  }
-			</script>
 		</div>
 	</div>
 

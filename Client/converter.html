@@ -20,24 +20,18 @@
     <link rel='shortcut icon' type='image/x-icon' href='img/favicon.png' />
     <!-- FontAwesome -->
     <script src="https://use.fontawesome.com/c761b0c982.js"></script>
+
      <!-- Google API -->
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://apis.google.com/js/client:platform.js" async defer></script>
-
 
     <!-- Our CSS/JS -->
     <link rel="stylesheet" type="text/css" href="css/style.css">
 	<script type="text/javascript" src="js/scripts.js"></script>
 
 	<!-- Import Materialize Library from CDNs -->
-	<!--
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
   	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
-  	-->
-
-
-  	<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
-  	<link rel="stylesheet" type="text/css" href="materialize/css/materialize.min.css">
 </head>
 <body>
 	<div class="navbar-fixed">
@@ -73,29 +67,37 @@
 						<input type="hidden" name="inputformat" id="inputformat">
 					</div>
 				</div>
-				<div class="input-field col s12 m6">
+				<div class="input-field col s12 m6" id="outputformatDiv" style="visibility: hidden;">
 					<select class="icons" name="outputformat" id="outputformat">
-						<option value="pdf" data-icon="img/carousel/pdf_carousel.png" class="left circle">PDF</option>
-						<option value="xls" data-icon="img/carousel/excel_carousel.png" class="left circle">File Excel</option>
-						<option value="doc" data-icon="img/carousel/word_carousel.png" class="left circle">File Word</option>
-						<option value="png" data-icon="img/carousel/png_carousel.png" class="left circle">PNG</option>
-						<option value="jpg" data-icon="img/carousel/jpg_carousel.png" class="left circle">JPEG</option>
+						<option value="pdf" data-icon="img/carousel/pdf_carousel.png" class="left circle">Documento PDF</option>
+						<option value="xls" data-icon="img/carousel/excel_carousel.png" class="left circle">Foglio Elettronico Excel XLS</option>
+						<option value="doc" data-icon="img/carousel/word_carousel.png" class="left circle">Documento Word DOC</option>
+						<option value="png" data-icon="img/carousel/png_carousel.png" class="left circle">Immagine PNG</option>
+						<option value="jpg" data-icon="img/carousel/jpg_carousel.png" class="left circle">Foto JPG</option>
+						<option value="txt" data-icon="img/carousel/txt_carousel.png" class="left circle">Testo TXT</option>
+						<option value="avi" data-icon="img/carousel/avi_carousel.png" class="left circle">Filmato AVI</option>
+						<option value="mp4" data-icon="img/carousel/mp4_carousel.png" class="left circle">Filmato MP4</option>
+						<option value="ppt" data-icon="img/carousel/ppt_carousel.png" class="left circle">Presentazione Power Point PPT</option>
 					</select>
 					<label>Converti in</label>
 				</div>
-				<div class="input-field col s12 m6" style="text-align: center !important;">
+				<div class="input-field col s12 m6" style="text-align: center !important; visibility: hidden;" id="buttonXP">
 					<button class="btn waves-effect waves-light" name="submit">Converti (via express)
 						<i class="fa fa-file" aria-hidden="true"></i>
 					</button>
 				</div>
 			</form>
-			<div class="input-field col s12 m6" style="text-align: center !important;">
+			<div class="input-field col s12 m6" style="text-align: center !important; visibility: hidden;" id="buttonWS">
 				<button class="btn waves-effect waves-light" name="wsConnect" onclick="wsConnect()">Converti (via WebSocket)
 					<i class="fa fa-file" aria-hidden="true"></i>
 				</button>
 			</div>
-			<div class="g-signin2" style="visibility: hidden;" data-onsuccess="onSignIn"></div>
-			<br><br><br><br><br>
+			<div class="input-field col s12 m6" style="text-align: center !important; visibility: hidden;">
+				<a class="btn waves-effect waves-light" href="" download="" id="fileDownload" name="fileDownload">Download
+					<i class="fa fa-file" aria-hidden="true"></i>
+				</a>
+			</div>
+			<br><br><br><br><br><br><br>
 		</div>
 	</div>
 
@@ -132,44 +134,47 @@
 
 			$("#filename").on("change", function() {
 				$("#inputformat").val($("#filename").val().split('.').pop());
+
+				/*
+				var inputformat = $("#inputformat").val();
+
+				switch(inputformat) {
+					case "jpg":
+						$("#outputformat").val("png");
+						break;
+					case "doc":
+						$("#outputformat").val("pdf");
+						break;
+					case "pdf":
+						$("#outputformat").val("doc");
+						break;
+					case "png":
+						$("#outputformat").val("jpg");
+						break;
+					case "mp4":
+						$("#outputformat").val("avi");
+						break;	
+					case "avi":
+						$("#outputformat").val("mp4");
+						break;
+					default:
+						$("#outputformat").val("pdf");
+						break;
+				};	
+				*/
 			});
 
 			$('#inputfile').on("change", function(event) {
 				var pathfile = URL.createObjectURL(event.target.files[0]);
 				$("#pathfile").val(pathfile);
+
+				if($("#outputformatDiv").css("visibility") == "hidden") {
+					$("#outputformatDiv, #buttonWS, #buttonXP").css("visibility", "");
+				}
 			});
+
 		});
 	</script>
 
-	<script>
-		$(document).ready(function() {
-			function onSignIn(googleUser) {
-				var profile = googleUser.getBasicProfile();
-				console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-				var user = profile.getName();
-				var image = profile.getImageUrl();
-				var mail = profile.getEmail(); // This is null if the 'email' scope is not present.
-
-				$(".login_li, .g-signin2").css({"display":"none", "visibility":"hidden"});
-				$(".profile_image_li").html("<img src=\""+image+"\" height=\"60px\" width=\"60px\"> ");
-				$(".profile_name_li").html(user + " ");
-				$(".logout_li, .profile_name_li, .profile_image_li").css({"display":"", "visibility":""});
-
-				$(".user_image").html("<img src=\""+image+"\">");
-				$(".user_name").html(user);
-				$(".user_email").html("<a href=\""+mail+"\">" + mail + "</a>");
-			}
-					
-			function signOut() {
-				var auth2 = gapi.auth2.getAuthInstance();
-				auth2.signOut().then(function () {
-					console.log('User signed out.');
-				});
-				$(".login_li").css({"display":"", "visibility":""});
-				$(".logout_li, .profile_image_li, .profile_name_li").css({"display":"none", "visibility":"visible"});
-			}
-		});
-	</script>
-	
 </body>
 </html>
