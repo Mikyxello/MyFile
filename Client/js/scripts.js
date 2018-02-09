@@ -2,14 +2,13 @@ function wsConnect() {
 	if ("WebSocket" in window) {
 		var ws = new WebSocket("ws://127.0.0.1:8080/");
 
+		/* Opening WebSocket client side */
 		ws.onopen = function() {
-			var pathfile = $("#pathfile").val();
 			var inputformat = $("#inputformat").val();
 			var inputfile = $("#filename").val();
 			var outputformat = $("#outputformat").val();
 
 			var mex = '{\
-				"pathfile": "'+pathfile+'",\
 				"inputformat": "'+inputformat+'",\
 				"inputfile": "'+inputfile+'",\
 				"outputformat": "'+outputformat+'"\
@@ -19,6 +18,7 @@ function wsConnect() {
 			console.log("Request sent...");
 		};
 
+		/* Received message with the converted filename on server */
 		ws.onmessage = function(evt) {
 			var received_msg = evt.data;
 			console.log("Received message: "+received_msg);
@@ -35,7 +35,7 @@ function wsConnect() {
 		};
 
 		window.onbeforeunload = function(event) {
-			//socket.close();
+			socket.close();
 		};
 	}
 
@@ -52,19 +52,6 @@ function onSignIn(googleUser) {
 	var user = profile.getName();
 	var image = profile.getImageUrl();
 	var mail = profile.getEmail(); // This is null if the 'email' scope is not present.
-
-	/* Send token to server */
-	/*
-	var id_token = googleUser.getAuthResponse().id_token;
-
-	var xhr = new XMLHttpRequest();
-	xhr.open('POST', 'https://127.0.0.1:8080/tokensignin');
-	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-	xhr.onload = function() {
-	  console.log('Signed in as: ' + xhr.responseText);
-	};
-	xhr.send('idtoken=' + id_token);
-	*/
 
 	$(".table_login, .login_li, .g-signin2").css({"display":"none", "visibility":"hidden"});
 	$(".logout_li, .profile_name_li, .profile_image_li, .table_user").css({"display":"", "visibility":""});

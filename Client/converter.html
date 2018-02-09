@@ -39,13 +39,10 @@
 			<div class="nav-wrapper">
 				<a href="index.html" class="brand-logo"><img src="img/logo-file-256x256.png" class="responsive" height="100%" width="50%" alt=""></a>
 				<ul class="right hide-on-med-and-down">
-					<li class="profile_name_li" style="visibility: hidden; display: none;"></li>
-					<li class="profile_image_li" style="visibility: hidden; display: none;"></li>
 					<li><a href="index.html">MyFile</a></li>
 					<li><a href="#">Converti File</a></li>
 					<li><a href="team.html">Il nostro team</a></li>
-					<li class="login_li"><a href="login.html">Login</a></li>
-					<li class="logout_li" style="visibility: hidden; display: none;"><a href="#" onclick="signOut();">Sign out</a></li>
+					<li><a href="login.html">Login</a></li>
 				</ul>
 			</div>
 		</nav>
@@ -55,11 +52,11 @@
 
 	<div class="main_container">
 		<div class="container">
+			<!-- Connection to the server on port 8080 -->
 			<form class="form_container" method="GET" action="http://127.0.0.1:8080/convert" name="convertion_body">
 				<div class="file-field input-field">
 					<div class="btn">
 						<span>File</span>
-						<input type="hidden" id="pathfile" name="pathfile">
 						<input type="file" id="inputfile" name="inputfile">
 					</div>
 					<div class="file-path-wrapper">
@@ -81,17 +78,19 @@
 					</select>
 					<label>Converti in</label>
 				</div>
-				<div class="input-field col s12 m6" style="text-align: center !important; visibility: hidden;" id="buttonXP">
+				<div class="input-field col s12 m6" style="text-align: center !important; visibility: hidden;" id="buttonConvert">
 					<button class="btn waves-effect waves-light" name="submit">Converti (via express)
 						<i class="fa fa-file" aria-hidden="true"></i>
 					</button>
 				</div>
 			</form>
+			<!--
 			<div class="input-field col s12 m6" style="text-align: center !important; visibility: hidden;" id="buttonWS">
 				<button class="btn waves-effect waves-light" name="wsConnect" onclick="wsConnect()">Converti (via WebSocket)
 					<i class="fa fa-file" aria-hidden="true"></i>
 				</button>
 			</div>
+			-->
 			<div class="input-field col s12 m6" style="text-align: center !important; visibility: hidden;">
 				<a class="btn waves-effect waves-light" href="" download="" id="fileDownload" name="fileDownload">Download
 					<i class="fa fa-file" aria-hidden="true"></i>
@@ -165,11 +164,8 @@
 			});
 
 			$('#inputfile').on("change", function(event) {
-				var pathfile = URL.createObjectURL(event.target.files[0]);
-				$("#pathfile").val(pathfile);
-
 				if($("#outputformatDiv").css("visibility") == "hidden") {
-					$("#outputformatDiv, #buttonWS, #buttonXP").css("visibility", "");
+					$("#outputformatDiv, #buttonConvert").css("visibility", "");
 				}
 			});
 
