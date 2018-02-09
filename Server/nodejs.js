@@ -7,6 +7,9 @@ var url = require('url');
 var http = require('http');
 var amqp =  require('amqplib/callback_api');
 var WebSocket = require('ws');
+var fs = require('fs');
+var request = require('request');
+var path = require('path');
 //var GoogleAuth = require('google-auth-library');
 //var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 /* ------------ */
@@ -20,9 +23,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 var active_connection = null;
+var a_t = '';
+
 
 app.get('/', function(req, res) {
-	console.log("code taken");
+	
+	res.sendFile('Client/index.html', {root: __dirname });
+
 	res.send('the access token is: ' + req.query.code);
 
 	var formData = {
@@ -31,56 +38,61 @@ app.get('/', function(req, res) {
 		client_secret: '8o1Qiw5oczWCgsBle-_Tdgyg',
 		redirect_uri: 'http://localhost:8080/index',
 		grant_type: 'authorization_code'
-	}
+	};
 
 	request.post({url:'https://www.googleapis.com/oauth2/v4/token', form: formData}, function optionalCallback(err, httpResponse, body) {
-	if (err) {
-		return console.error('upload failed:', err);
-	}
-	console.log('Upload successful!  Server responded with:', body);
-	var info = JSON.parse(body);
-	res.send("Got the token "+ info.access_token);
-	a_t = info.access_token;a_t = info.access_token;
+		if (err) {
+			return console.error('upload failed:', err);
+		}
+		console.log('Upload successful!  Server responded with:', body);
+		var info = JSON.parse(body);
+		res.send("Got the token "+ info.access_token);
+		a_t = info.access_token;
+	});
 });
 
 /* ---- Pages redirect ----- */
 app.get('/index', function(req, res) {
-	res.redirect("index.html");
+	res.sendFile('Client/index.html', {root: __dirname });
 });
 
 app.get('/loginpage', function(req, res) {
-	res.redirect("login.html");
+	res.sendFile('Client/login.html', {root: __dirname });
 });
 
 app.get('/team', function(req, res) {
-	res.redirect("team.html");
+	res.sendFile('Client/team.html', {root: __dirname });
 });
 
 app.get('/converter', function(req, res) {
-	res.redirect("converter.html");
+	res.sendFile('Client/converter.html', {root: __dirname });
 });
 /* ----------------------- */
 
+/* Execute convertion request with API (see function convertion) */
 app.get('/convert', function(req, res){
 
 	var inputformat = req.query.inputformat;
 	var inputfile = req.query.inputfile;
 	var outputformat = req.query.outputformat;
 
-	console.log("[IP]" + (req.headers['x-forwarded-for'] || req.connection.remoteAddress));
+	var result = convertion(inputformat, inputfile, outputformat);
 
-	var result = convertion(inputformat, inputfile, outputformat, "express");
-
+	active_connection.send(result);
 	res.download(result);
 });
 
+/* Executing file download request */
 app.get('/download', function(req, res){
 	var filename = req.query.filename;
+	log("[DOWNLOAD]" + filename);
 	res.download(filename);
 });
 
+/* Executing login request */
 app.get('/login', function(req, res) {
 	res.redirect("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/calendar&response_type=code&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=http%3A%2F%2Flocalhost:8080&client_id=994040047931-2l5sg2eiko1ecuka90dooubk3dkadvvv.apps.googleusercontent.com");
+	log("[LOGIN]" + (req.headers['x-forwarded-for'] || req.connection.remoteAddress));	// Log with the IP of client
 });
 
 app.get('/use_token', function(req, res){
@@ -102,16 +114,31 @@ app.get('/use_token', function(req, res){
 	});
 });
 
+/* WebSocket connection received from client */
+wss.on('connection', function connection(ws, req) {
+	const location = url.parse(req.url, true);
+	active_connection = ws;
+
+	ws.onclose = function() {
+		console.log("[CLIENT]Closed connection");			
+	};
+
+	log("[CONNECTION] Connection enstablished with " + (req.headers['x-forwarded-for'] || req.connection.remoteAddress));	// Log with the IP of client
+});
+
+wss.on('close', function close() {
+	log("[SERVER] Closed");	
+});
 
 
 /* Using CloudConvert API */
-function convertion(inputformat, inputfile, outputformat, type) {
+function convertion(inputformat, inputfile, outputformat) {
+	/* Log string */
 	var ret_string = "Conversion from " + inputfile + " to " + inputfile.substr(0, inputfile.lastIndexOf('.'))+"."+outputformat;
+	log("[REQUEST]"+ret_string);
 
-	log("[REQUEST]"+ret_string, type);
-
-	var fs = require('fs'),
-    cloudconvert = new (require('cloudconvert'))('GOF05MzbYRdxGeKiQAzsdm968KU1-rV099JMD2oRMkjtFP4SZbggvhn4qjKKutxM2xUQGq0jm3sa6LXqW6BPUA');
+	/* Using CloudConvert Node Module with FileSystem Module for creating a new file, giving to API the existing file for convertion */
+    var cloudconvert = new (require('cloudconvert'))('GOF05MzbYRdxGeKiQAzsdm968KU1-rV099JMD2oRMkjtFP4SZbggvhn4qjKKutxM2xUQGq0jm3sa6LXqW6BPUA');
  	try {
 		fs.createReadStream(inputfile)
 		.pipe(cloudconvert.convert({
@@ -123,65 +150,34 @@ function convertion(inputformat, inputfile, outputformat, type) {
 		})).on('error', function(e){log("[ERROR] " + e)})
 		.pipe(fs.createWriteStream(inputfile.substr(0, inputfile.lastIndexOf('.'))+"."+outputformat)).on('error', function(e){log("[ERROR] " + e)});
 
-		log("[SUCCESS]"+ret_string, type);
+		log("[SUCCESS]"+ret_string);
 
+		/* Return filename of the converted one */
 		return inputfile.substr(0, inputfile.lastIndexOf('.'))+"."+outputformat;
 	} catch(err){
-		log("[ERROR]"+err.message, type);
+		log("[ERROR]"+err.message);
 		return err.message;
 	}
 }
 
-
-wss.on('connection', function connection(ws, req) {
-	const location = url.parse(req.url, true);
-	active_connection = ws;
-
-	ws.on('message', function incoming(message) {
-		var json_message = JSON.parse(message);
-
-		var inputformat = json_message.inputformat;
-		var inputfile = json_message.inputfile;
-		var outputformat = json_message.outputformat;
-
-		log("[IP]" + (req.headers['x-forwarded-for'] || req.connection.remoteAddress));	// Checking IP connection (localhost, 127.0.0.1)
-
-		var result = convertion(inputformat, inputfile, outputformat, "ws");
-
-		ws.send(result);
-	});
-	
-});
-
 /* Logging via AMQP on RabbitMQ */
-
-/* 
-* Da modificare in log(string) {...} (senza type)
-* eliminare quindi anche if else interno
-*/
-function log(string, type) {
+function log(string) {
 	amqp.connect('amqp://localhost', function(err, conn) {
 		conn.createChannel(function(err, ch) {
 		var ex = 'logger';
-		
-		var msg = "";
 
 		ch.assertExchange(ex, 'fanout', {durable: false});
 
-		msg = "[LOG]" + string;
-
-		if(type == "ws") 
-			msg += "[WebSocket]";
-		else if (type == "express")
-			msg += "[Express]"
+		var msg = "[LOG]" + string;
 		
 		ch.publish(ex, '', new Buffer(msg));
 		console.log(msg);
 		});
 	});
-};
+}
 
 /* Starting WebSocket on port 8080 */
 server.listen(8080, function listening() {
   console.log('[SERVER] Listening on %d', server.address().port);
+  log("[SERVER] Boot server");
 });

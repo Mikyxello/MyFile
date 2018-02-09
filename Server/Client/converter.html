@@ -17,7 +17,7 @@
     <!-- RALEWAY FONT -->
   	<link href="https://fonts.googleapis.com/css?family=Raleway:600" rel="stylesheet">
     <!-- Favicon -->
-    <link rel='shortcut icon' type='image/x-icon' href='img/favicon.png' />
+    <link rel='shortcut icon' type='image/x-icon' href='/img/favicon.png' />
     <!-- FontAwesome -->
     <script src="https://use.fontawesome.com/c761b0c982.js"></script>
 
@@ -32,17 +32,55 @@
 	<!-- Import Materialize Library from CDNs -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
   	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+  	<script>
+  		function wsConnect() {
+	  		if ("WebSocket" in window) {
+				var ws = new WebSocket("ws://127.0.0.1:8080/");
+
+				/* Opening WebSocket client side */
+				ws.onopen = function() {
+					ws.send("Request for convertion");
+					console.log("Request sent...");
+				};
+
+				/* Received message with the converted filename on server */
+				ws.onmessage = function(evt) {
+					var received_msg = evt.data;
+					console.log("Received "+received_msg);
+
+					document.getElementById("fileDownload").href = "http://127.0.0.1:8080/download?filename=" + received_msg;
+					document.getElementById("fileDownload").download = received_msg;
+					document.getElementById("fileDownload").style.visibility = "visible";
+
+					//ws.close();
+				};
+
+				ws.onclose = function() {
+					console.log("Connection closed...");
+				};
+
+				window.onbeforeunload = function(event) {
+					socket.close();
+				};
+			}
+
+			else {
+				alert("WebSocket NOT supported by your Browser!");
+			}
+		}
+	</script>
 </head>
 <body>
 	<div class="navbar-fixed">
 		<nav>
 			<div class="nav-wrapper">
-				<a href="index.html" class="brand-logo"><img src="img/logo-file-256x256.png" class="responsive" height="100%" width="50%" alt=""></a>
+				<a href="index" class="brand-logo"><img src="/img/logo-file-256x256.png" alt="LOGO" class="responsive" height="100%" width="50%" alt=""></a>
 				<ul class="right hide-on-med-and-down">
-					<li><a href="index.html">MyFile</a></li>
+					<li><a href="index">MyFile</a></li>
 					<li><a href="#">Converti File</a></li>
-					<li><a href="team.html">Il nostro team</a></li>
-					<li><a href="login.html">Login</a></li>
+					<li><a href="team">Il nostro team</a></li>
+					<li><a href="loginpage">Login</a></li>
 				</ul>
 			</div>
 		</nav>
@@ -66,32 +104,26 @@
 				</div>
 				<div class="input-field col s12 m6" id="outputformatDiv" style="visibility: hidden;">
 					<select class="icons" name="outputformat" id="outputformat">
-						<option value="pdf" data-icon="img/carousel/pdf_carousel.png" class="left circle">Documento PDF</option>
-						<option value="xls" data-icon="img/carousel/excel_carousel.png" class="left circle">Foglio Elettronico Excel XLS</option>
-						<option value="doc" data-icon="img/carousel/word_carousel.png" class="left circle">Documento Word DOC</option>
-						<option value="png" data-icon="img/carousel/png_carousel.png" class="left circle">Immagine PNG</option>
-						<option value="jpg" data-icon="img/carousel/jpg_carousel.png" class="left circle">Foto JPG</option>
-						<option value="txt" data-icon="img/carousel/txt_carousel.png" class="left circle">Testo TXT</option>
-						<option value="avi" data-icon="img/carousel/avi_carousel.png" class="left circle">Filmato AVI</option>
-						<option value="mp4" data-icon="img/carousel/mp4_carousel.png" class="left circle">Filmato MP4</option>
-						<option value="ppt" data-icon="img/carousel/ppt_carousel.png" class="left circle">Presentazione Power Point PPT</option>
+						<option value="pdf" data-icon="/img/carousel/pdf_carousel.png" class="left circle">Documento PDF</option>
+						<option value="xls" data-icon="/img/carousel/excel_carousel.png" class="left circle">Foglio Elettronico Excel XLS</option>
+						<option value="doc" data-icon="/img/carousel/word_carousel.png" class="left circle">Documento Word DOC</option>
+						<option value="png" data-icon="/img/carousel/png_carousel.png" class="left circle">Immagine PNG</option>
+						<option value="jpg" data-icon="/img/carousel/jpg_carousel.png" class="left circle">Foto JPG</option>
+						<option value="txt" data-icon="/img/carousel/txt_carousel.png" class="left circle">Testo TXT</option>
+						<option value="avi" data-icon="/img/carousel/avi_carousel.png" class="left circle">Filmato AVI</option>
+						<option value="mp4" data-icon="/img/carousel/mp4_carousel.png" class="left circle">Filmato MP4</option>
+						<option value="ppt" data-icon="/img/carousel/ppt_carousel.png" class="left circle">Presentazione Power Point PPT</option>
 					</select>
 					<label>Converti in</label>
 				</div>
 				<div class="input-field col s12 m6" style="text-align: center !important; visibility: hidden;" id="buttonConvert">
-					<button class="btn waves-effect waves-light" name="submit">Converti (via express)
+					<button class="btn waves-effect waves-light" name="submit" onclick="wsConnect()">Converti
 						<i class="fa fa-file" aria-hidden="true"></i>
 					</button>
 				</div>
 			</form>
-			<!--
-			<div class="input-field col s12 m6" style="text-align: center !important; visibility: hidden;" id="buttonWS">
-				<button class="btn waves-effect waves-light" name="wsConnect" onclick="wsConnect()">Converti (via WebSocket)
-					<i class="fa fa-file" aria-hidden="true"></i>
-				</button>
-			</div>
-			-->
-			<div class="input-field col s12 m6" style="text-align: center !important; visibility: hidden;">
+
+			<div class="input-field col s12 m6" style="text-align: center !important; visibility: hidden !important;">
 				<a class="btn waves-effect waves-light" href="" download="" id="fileDownload" name="fileDownload">Download
 					<i class="fa fa-file" aria-hidden="true"></i>
 				</a>
@@ -128,13 +160,13 @@
     </div>
 
     <script>
+
 		$(document).ready(function() {
 			$('select').material_select();
 
 			$("#filename").on("change", function() {
 				$("#inputformat").val($("#filename").val().split('.').pop());
 
-				/*
 				var inputformat = $("#inputformat").val();
 
 				switch(inputformat) {
@@ -159,16 +191,21 @@
 					default:
 						$("#outputformat").val("pdf");
 						break;
-				};	
-				*/
+				};
 			});
 
-			$('#inputfile').on("change", function(event) {
+			$('#inputfile').on("change", function() {
 				if($("#outputformatDiv").css("visibility") == "hidden") {
 					$("#outputformatDiv, #buttonConvert").css("visibility", "");
 				}
 			});
 
+			/* Hide download button after download */
+			/*
+			$("#fileDownload").on("click", function() {
+				$("#fileDownload").css("visibility", "hidden");
+			});
+			*/
 		});
 	</script>
 
