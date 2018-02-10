@@ -5,9 +5,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	<meta charset="utf-8">
 
-	<!-- GOOGLE META -->
-	<meta name="google-signin-client_id" content="994040047931-8gd198l125ri5pahsrrgarbl5fhqsdje.apps.googleusercontent.com">
-
 	<title>MyFile | Converter</title>
 
 	<!-- Import Google Icon Font -->
@@ -20,10 +17,6 @@
     <link rel='shortcut icon' type='image/x-icon' href='/img/favicon.png' />
     <!-- FontAwesome -->
     <script src="https://use.fontawesome.com/c761b0c982.js"></script>
-
-     <!-- Google API -->
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <script src="https://apis.google.com/js/client:platform.js" async defer></script>
 
     <!-- Our CSS/JS -->
     <link rel="stylesheet" type="text/css" href="css/style.css">
@@ -40,7 +33,13 @@
 
 				/* Opening WebSocket client side */
 				ws.onopen = function() {
-					ws.send("Request for convertion");
+					var msg = '{\
+						"inputformat": "' + $("#inputformat").val() + '",\
+						"inputfile": "' + $("#filename").val() + '",\
+						"outputformat": "' + $("#outputformat").val() + '"\
+					}';
+					
+					ws.send(msg);
 					console.log("Request sent...");
 				};
 
@@ -52,6 +51,9 @@
 					document.getElementById("fileDownload").href = "http://127.0.0.1:8080/download?filename=" + received_msg;
 					document.getElementById("fileDownload").download = received_msg;
 					document.getElementById("fileDownload").style.visibility = "visible";
+
+					document.getElementById("twitterShare").href = "http://127.0.0.1:8080/twittershare?filename=" + received_msg;
+					document.getElementById("twitterShare").style.visibility = "visible";
 
 					//ws.close();
 				};
@@ -91,7 +93,7 @@
 	<div class="main_container">
 		<div class="container">
 			<!-- Connection to the server on port 8080 -->
-			<form class="form_container" method="GET" action="http://127.0.0.1:8080/convert" name="convertion_body">
+			<!--<form class="form_container" method="GET" action="http://127.0.0.1:8080/convert" name="convertion_body">-->
 				<div class="file-field input-field">
 					<div class="btn">
 						<span>File</span>
@@ -121,10 +123,15 @@
 						<i class="fa fa-file" aria-hidden="true"></i>
 					</button>
 				</div>
-			</form>
+			<!--</form>-->
 
 			<div class="input-field col s12 m6" style="text-align: center !important; visibility: hidden !important;">
 				<a class="btn waves-effect waves-light" href="" download="" id="fileDownload" name="fileDownload">Download
+					<i class="fa fa-file" aria-hidden="true"></i>
+				</a>
+			</div>
+			<div class="input-field col s12 m6" style="text-align: center !important; visibility: hidden !important;">
+				<a class="btn waves-effect waves-light" id="twitterShare" name="twitterShare">Condividi su Twitter
 					<i class="fa fa-file" aria-hidden="true"></i>
 				</a>
 			</div>

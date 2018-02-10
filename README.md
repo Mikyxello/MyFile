@@ -1,6 +1,6 @@
 # MyFile
 ## Descrizione
-MyFile è un'applicazione web che si pone l'obbiettivo di fornire un servizio RESTful di conversione file collegato con le API di "Cloud Converter" che permette di salvare i file convertiti sul proprio dispositivo (PC, Smartphone o Tablet) e salvarne una copia anche sul servizio di storage online sicuro "Google Drive" attraverso i meccanismi di oAuth 2.0 di Google. Il tutto realizzato con un client sviluppato in HTML5, JS e CSS3, unito con un server sviluppato in JS tramite NodeJS e i suoi moduli.
+MyFile è un'applicazione web che si pone l'obbiettivo di fornire un servizio RESTful di conversione file collegato con le API di "Cloud Converter" che permette di salvare i file convertiti sul proprio dispositivo (PC, Smartphone o Tablet) ed eventualmente effettuare una condivisione su Twitter dell'avvenuta conversione (previa autenticazione su Twitter tramite oAuth). Il tutto realizzato con un client sviluppato in HTML5, JS e CSS3, unito con un server sviluppato in JS tramite NodeJS e i suoi moduli.
 
 ## Collaboratori
 *Michele Anselmi* [@Mikyxello](https://github.com/Mikyxello)
@@ -16,28 +16,28 @@ MyFile è un'applicazione web che si pone l'obbiettivo di fornire un servizio RE
 * [Cloud Convert](https://cloudconvert.com/)
 * [RabbitMQ](https://www.rabbitmq.com/)
 * [NodeJS](https://nodejs.org/en/)
-* [Google Drive](https://developers.google.com/drive/)
-* [oAuth Google](https://developers.google.com/identity/protocols/OAuth2))
+* [Twitter oAuth](https://developer.twitter.com/en/docs/basics/authentication/overview/oauth)
+* [Twitter API](https://developer.twitter.com/en/docs)
 
 ## License
 * This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
 # To Do
 ### Funzionalità da implementare
-* Implementare Google oAuth 2.0 lato client/server
-* Implementare Google Drive API
-
-## Bugs
-* Upload di file locati nel client (funziona solo con file nella directory del server)
-* <del>Problema nel download del file, non salvare il file convertito nel server ma inviare il link per il download al client</del>
-* Mancata visualizzazione immagini, CSS e utilizzo file JS (nel caricamento HTML da server)
-
-### Done
+* <del>Implementare Twitter oAuth lato client/server</del>
+* Condivisione su Twitter previo oAuth
+* Visualizzazione del nickname di Twitter dopo il login affiancato dal logo di Twitter 
 * <del>Starting website</del>
-* <del>Pagina HTML per il login (tramite oAuth Google)</del>
+* Pagina HTML per il login (tramite oAuth)   **MIGLIORARE**
 * <del>Server JS in localhost (basato sulla tecnologia NodeJS che raccoglie i dati inviati dalla form HTML ed effettua la richiesta a Cloud Convert per la conversione</del>
 * <del>Gestire la grafica HTML con il pacchetto <b>Materialize</b></del>
 * <del>Pagina HTML per la conversione dei file (inserimento file, scelta del tipo di conversione basato sull'estensione del file in input, submit del form)</del>
 * <del>Loggin su server RabbitMQ tramite protocollo AMQP</del>
 * <del>Download su client del file convertito</del>
 * <del>Una volta effettuata la richiesta dal client, ricevere redirect su pagina con pulsante di download (che accede al link ricevuto dalla conversione)</del>
+
+
+## Bugs
+* Upload di file locati nel client (funziona solo con file nella directory del server)
+* <del>Problema nel download del file, non salvare il file convertito nel server ma inviare il link per il download al client</del>
+* Mancata visualizzazione immagini, CSS e utilizzo file JS (nel caricamento HTML da server)
