@@ -16,7 +16,7 @@
     <!-- Favicon -->
     <link rel='shortcut icon' type='image/x-icon' href='img/favicon.png' />
     <!-- FontAwesome -->
-    <script src="https://use.fontawesome.com/c761b0c982.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 
     <!-- Our CSS/JS -->
     <link rel="stylesheet" type="text/css" href="css/style.css">
@@ -32,32 +32,73 @@
 			<div class="nav-wrapper">
 				<a href="index" class="brand-logo"><img src="img/logo-file-256x256.png" class="responsive" height="100%" width="50%" alt=""></a>
 				<ul class="right hide-on-med-and-down">
+					<li style="
+						visibility: hidden !important;
+						display: none !important;
+						color: #FFFFFF !important;
+						background-color: #1DA1F2 !important;
+						border-radius: 10px 25px !important;
+						padding-left: 10px !important;
+						padding-right: 10px !important;
+					" id="user"></li>
 					<li><a href="index">MyFile</a></li>
 					<li><a href="converter">Converti File</a></li>
 					<li><a href="team">Il nostro team</a></li>
-					<li><a href="#">Login</a></li>
+					<li><a href="#" id="login">Login</a></li>
+					<li><a href="logout" style="visibility: hidden; display: none;" id="logout">Logout</a></li>
 				</ul>
 			</div>
 		</nav>
 	</div>
 
+	<script>
+		$(document).ready(function() {
+			$.ajax({
+				method: 'POST',
+				url: 'http://127.0.0.1:8080/username',
+				success: function(data) {
+					if(data) {
+						$("#user").html('<i class="fab fa-twitter"></i> ' + data);
+						$("#user, #logout").css({
+							"visibility": "",
+							"display": ""
+						});
+						$("#login, #buttonlogin").css({
+							"visibility": "hidden",
+							"display": "none"
+						});
+						$(".login_title").text("Benvenuto " + data);
+					}
+				},
+				error: function() {
+					console.log("Error login");
+					$("#user, #logout").css({
+						"visibility": "hidden",
+						"display": "none"
+					});
+					$("#login, #buttonlogin").css({
+						"visibility": "",
+						"display": ""
+					});
+				}
+			});
+		});
+	</script>
+
 	<h1 class="center login_title">Accedi</h1>
 
-	<div class="main_container">
-		<div class="container">
-
-			<style type="text/css">
-				a#twitter {
-					border-color: #007aa6;
-					background-color: #008cbf;
-					background-image: url(https://g.twimg.com/Twitter_logo_white.png);
-				}
-			</style>
+	<div class="main_container" style="text-align: center !important;">
+		<div class="container" style="text-align: center !important; padding-bottom: 15%;">
 
 			<!-- LOGIN OAUTH -->
-			<a href="twitterlogin" class="twitter">Sign in with Twitter</a>
-
-
+			<a href="twitterlogin" id="buttonlogin" style="
+				color: #FFFFFF !important;
+				background-color: #1DA1F2 !important;
+				border-radius: 10px 25px !important;
+				padding: 20px !important;
+				margin: 20px !important;
+				text-align: center !important;
+			">Sign in with Twitter <i class="fab fa-twitter"></i></a>
 		</div>
 	</div>
 

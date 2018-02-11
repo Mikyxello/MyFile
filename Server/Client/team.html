@@ -16,7 +16,7 @@
     <!-- Favicon -->
     <link rel='shortcut icon' type='image/x-icon' href='img/favicon.png' />
     <!-- FontAwesome -->
-    <script src="https://use.fontawesome.com/c761b0c982.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 
     <!-- Our CSS/JS -->
     <link rel="stylesheet" type="text/css" href="css/style.css">
@@ -32,14 +32,57 @@
 			<div class="nav-wrapper">
 				<a href="index.html" class="brand-logo"><img src="img/logo-file-256x256.png" class="responsive" height="100%" width="50%" alt=""></a>
 				<ul class="right hide-on-med-and-down">
+					<li style="
+						visibility: hidden !important;
+						display: none !important;
+						color: #FFFFFF !important;
+						background-color: #1DA1F2 !important;
+						border-radius: 10px 25px !important;
+						padding-left: 10px !important;
+						padding-right: 10px !important;
+					" id="user"></li>
 					<li><a href="index">MyFile</a></li>
 					<li><a href="converter">Converti File</a></li>
 					<li><a href="#">Il nostro team</a></li>
-					<li><a href="loginpage">Login</a></div></li>
+					<li><a href="loginpage" id="login">Login</a></li>
+					<li><a href="logout" style="visibility: hidden; display: none;" id="logout">Logout</a></li>
 				</ul>
 			</div>
 		</nav>
 	</div>
+
+	<script>
+		$(document).ready(function() {
+			$.ajax({
+				method: 'POST',
+				url: 'http://127.0.0.1:8080/username',
+				success: function(data) {
+					if(data) {
+						$("#user").html('<i class="fab fa-twitter"></i> ' + data);
+						$("#user, #logout").css({
+							"visibility": "",
+							"display": ""
+						});
+						$("#login").css({
+							"visibility": "hidden",
+							"display": "none"
+						});
+					}
+				},
+				error: function() {
+					console.log("Error login");
+					$("#user, #logout").css({
+						"visibility": "hidden",
+						"display": "none"
+					});
+					$("#login").css({
+						"visibility": "",
+						"display": ""
+					});
+				}
+			});
+		});
+	</script>
 
 	<h1 class="center">Il nostro team</h1>
 

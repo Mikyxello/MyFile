@@ -26,9 +26,9 @@ MyFile è un'applicazione web che si pone l'obbiettivo di fornire un servizio RE
 ### Funzionalità da implementare
 * <del>Implementare Twitter oAuth lato client/server</del>
 * Condivisione su Twitter previo oAuth
-* Visualizzazione del nickname di Twitter dopo il login affiancato dal logo di Twitter 
+* <del>Visualizzazione del nickname di Twitter dopo il login affiancato dal logo di Twitter</del>
 * <del>Starting website</del>
-* Pagina HTML per il login (tramite oAuth)   **MIGLIORARE**
+* <del>Pagina HTML per il login (tramite oAuth)</del>
 * <del>Server JS in localhost (basato sulla tecnologia NodeJS che raccoglie i dati inviati dalla form HTML ed effettua la richiesta a Cloud Convert per la conversione</del>
 * <del>Gestire la grafica HTML con il pacchetto <b>Materialize</b></del>
 * <del>Pagina HTML per la conversione dei file (inserimento file, scelta del tipo di conversione basato sull'estensione del file in input, submit del form)</del>
@@ -41,3 +41,4 @@ MyFile è un'applicazione web che si pone l'obbiettivo di fornire un servizio RE
 * Upload di file locati nel client (funziona solo con file nella directory del server)
 * <del>Problema nel download del file, non salvare il file convertito nel server ma inviare il link per il download al client</del>
 * Mancata visualizzazione immagini, CSS e utilizzo file JS (nel caricamento HTML da server)
+* In chiusura del browser genera errore non gestito da client (probabile chiusura WebSocket non gestita)

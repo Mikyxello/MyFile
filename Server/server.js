@@ -131,6 +131,13 @@ app.get('/download', function(req, res){
 	res.download(filename);
 });
 
+/* Logout from Twitter */
+app.get('/logout', function(req, res){
+	log("[LOGOUT] Logout effettuato!");
+	req.session.destroy();
+	res.redirect('/index');
+});
+
 
 /* WebSocket connection received from client */
 wss.on('connection', function connection(ws, req) {
@@ -155,6 +162,7 @@ wss.on('connection', function connection(ws, req) {
 
 wss.on('close', function close() {
 	log("[SERVER] Closed");	
+	active_connection=null;
 });
 
 /* Starting WebSocket on port 8080 */
