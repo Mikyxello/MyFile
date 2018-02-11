@@ -50,6 +50,17 @@ var active_connection = null;
 var a_t = '';
 
 
+app.post('/username', function(req, res) {
+	consumer.get("https://api.twitter.com/1.1/account/verify_credentials.json", req.session.oauthAccessToken, req.session.oauthAccessTokenSecret, function (error, data, response) {
+		if (error) {
+			res.end();
+		} else {
+			var parsedData = JSON.parse(data);
+			res.send(inspect(parsedData.screen_name));
+		} 
+	});
+});
+
 /* ---- Pages redirect ----- */
 app.get('/', function(req, res) {
 	res.sendFile('Client/index.html', {root: __dirname });
@@ -80,11 +91,9 @@ app.get('/twittershare', function(req,res) {
 app.get('/twitterlogin', function(req,res) {
 	consumer.get("https://api.twitter.com/1.1/account/verify_credentials.json", req.session.oauthAccessToken, req.session.oauthAccessTokenSecret, function (error, data, response) {
 		if (error) {
-			console.log(error)
 			res.redirect('/sessions/connect');
 		} else {
-			var parsedData = JSON.parse(data);
-			res.send('You are signed in: ' + inspect(parsedData.screen_name));
+			res.redirect('/index');
 		} 
 	});
 });
@@ -93,27 +102,22 @@ app.get('/twitterlogin', function(req,res) {
 app.get('/sessions/connect', function(req, res){
 	consumer.getOAuthRequestToken(function(error, oauthToken, oauthTokenSecret, results){
 		if (error) {
-			res.send("Error getting OAuth request token : " + inspect(error), 500);
-		} else {  
+			res.status(500).send("Error getting OAuth request token : " + inspect(error));
+		} else {
 			req.session.oauthRequestToken = oauthToken;
 			req.session.oauthRequestTokenSecret = oauthTokenSecret;
-			
-			console.log("<<"+req.session.oauthRequestToken);
-			console.log("<<"+req.session.oauthRequestTokenSecret);
 			res.redirect("https://twitter.com/oauth/authorize?oauth_token="+req.session.oauthRequestToken);      
 		}
 	});
 });
 app.get('/sessions/callback', function(req, res){
-	console.log(">>"+req.session.oauthRequestToken);
-	console.log(">>"+req.session.oauthRequestTokenSecret);
-	console.log(">>"+req.query.oauth_verifier);
 	consumer.getOAuthAccessToken(req.session.oauthRequestToken, req.session.oauthRequestTokenSecret, req.query.oauth_verifier, function(error, oauthAccessToken, oauthAccessTokenSecret, results) {
 		if (error) {
-			res.send("Error getting OAuth access token : " + inspect(error) + "[" + oauthAccessToken + "]" + "[" + oauthAccessTokenSecret + "]" + "[" + inspect(result) + "]", 500);
+			res.status(500).send("Error getting OAuth access token : " + inspect(error) + "[" + oauthAccessToken + "]" + "[" + oauthAccessTokenSecret + "]" + "[" + inspect(results) + "]");
 		} else {
 			req.session.oauthAccessToken = oauthAccessToken;
 			req.session.oauthAccessTokenSecret = oauthAccessTokenSecret;
+			log("[LOGIN] Effettuato login!");
 			res.redirect('/index');
 		}
 	});
@@ -198,7 +202,7 @@ function log(string) {
 
 		ch.assertExchange(ex, 'fanout', {durable: false});
 
-		var msg = "[LOG]" + string;
+		var msg = string;
 		
 		ch.publish(ex, '', new Buffer(msg));
 		console.log(msg);

@@ -22,10 +22,6 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
 	<script type="text/javascript" src="js/scripts.js"></script>
 
-    <!-- Google API -->
-	<script src="https://apis.google.com/js/platform.js" async defer></script>
-	<script src="https://apis.google.com/js/client:platform.js" async defer></script>
-
 	<!-- Import Materialize Library from CDNs -->
   	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
   	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
@@ -36,6 +32,7 @@
 			<div class="nav-wrapper">
 				<a href="index" class="brand-logo"><img src="img/logo-file-256x256.png" class="responsive" height="100%" width="50%" alt=""></a>
 				<ul class="right hide-on-med-and-down">
+					<li style="visibility: hidden !important;" id="user"></li>
 					<li><a href="#">MyFile</a></li>
 					<li><a href="converter">Converti File</a></li>
 					<li><a href="team">Il nostro team</a></li>
@@ -44,6 +41,24 @@
 			</div>
 		</nav>
 	</div>
+
+	<script>
+		$(document).ready(function() {
+			$.ajax({
+				method: 'POST',
+				url: 'http://127.0.0.1:8080/username',
+				success: function(data) {
+					if(data) {
+						$("#user").html('<i class="fa fa-twitter-square" aria-hidden="true">' + data + '</i>');
+						$("#user").css("visibility", "visible");
+					}
+				},
+				error: function() {
+					console.log("Error login");
+				}
+			});
+		});
+	</script>
 
 	<div class="main_container">
 		<div class="container">
