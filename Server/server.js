@@ -84,6 +84,20 @@ app.get('/converter', function(req, res) {
 /* ----------------------- */
 
 app.get('/twittershare', function(req,res) {
+	var message="Ho convertito il mio file " + req.query.filename + " tramite l'app MyFile ";
+	var client = new TwitterPackage({
+	consumer_key: _twitterConsumerKey,
+	consumer_secret: _twitterConsumerSecret,
+	access_token_key: req.session.oauthAccessToken,
+	access_token_secret: req.session.oauthAccessTokenSecret,
+	});
+	client.post('statuses/update', {status: message },  function(error, tweet, response) {
+	if(error){
+		console.log(error);
+	}
+	//console.log(tweet);  // Tweet body. 
+	//console.log(response);  // Raw response object. 
+	});
 
 });
 
