@@ -18,6 +18,7 @@ var session = require('express-session');
 var inspect = require('util-inspect');
 var logger = require('express-logger');
 var cookieParser = require('cookie-parser');
+var FileReader = require('filereader');
 /* ------------ */
 
 var _twitterConsumerKey = "g9fWPHBCmMyLyWVQwfLL6tfTs";
@@ -37,6 +38,10 @@ app.use(bodyParser.json());
 app.use(logger({ path: "log/express.log"}));
 app.use(cookieParser());
 app.use(session({ secret: "very secret", resave: false, saveUninitialized: true}));
+app.use('/img', express.static(__dirname + '/img'));
+app.use('/css', express.static(__dirname + '/css'));
+app.use('/js', express.static(__dirname + '/js'));
+app.use(express.static(__dirname + '/Client'));
 
 app.use(function(req, res, next) {
 	res.locals.session = req.session;
@@ -50,6 +55,7 @@ var active_connection = null;
 var a_t = '';
 
 
+/* Automatic request on every page for checking if is logged in */
 app.post('/username', function(req, res) {
 	consumer.get("https://api.twitter.com/1.1/account/verify_credentials.json", req.session.oauthAccessToken, req.session.oauthAccessTokenSecret, function (error, data, response) {
 		if (error) {
@@ -83,21 +89,81 @@ app.get('/converter', function(req, res) {
 });
 /* ----------------------- */
 
+
 app.get('/twittershare', function(req,res) {
-	var message="Ho convertito il mio file " + req.query.filename + " tramite l'app MyFile ";
-	var client = new TwitterPackage({
-	consumer_key: _twitterConsumerKey,
-	consumer_secret: _twitterConsumerSecret,
-	access_token_key: req.session.oauthAccessToken,
-	access_token_secret: req.session.oauthAccessTokenSecret,
-	});
-	client.post('statuses/update', {status: message },  function(error, tweet, response) {
-	if(error){
-		console.log(error);
+	/* Variables for filenaming */
+	var filename = req.query.filename;
+	var outputformat = req.query.outputformat;
+	var name = filename.substr(0, filename.lastIndexOf('.'));
+	var outputfile = name + "." + outputformat;	// File to upload
+
+	var message="Ho convertito il mio file " + filename + " tramite MyFile!";
+	
+	var media_id;
+	var data;
+   	var file;
+
+   	/* If the file is an image, upload it with the post */
+	if(outputformat == 'jpg' || outputformat == 'png') {
+
+		try {
+			/* Create a BASE64 encoded file for upload */
+			file = new Buffer(fs.readFileSync(outputfile)).toString('base64');
+
+			/* Upload it on Twitter */
+			consumer.post('https://upload.twitter.com/1.1/media/upload.json', req.session.oauthAccessToken, req.session.oauthAccessTokenSecret, {media: file}, function(error, upload, response) {
+				if(error){
+					log("[ERROR]"+error);
+					res.redirect('/index');
+				}
+				else {
+					log("[UPLOADED]"+outputfile);
+
+					/* Take media_id_string on Twitter */
+					var json_uploaded = JSON.parse(upload);
+					media_id = inspect(json_uploaded.media_id_string);
+					media_id = media_id.replace(/['"]+/g, '');
+
+					data = {
+						status: message,
+						media_ids: media_id
+					};
+
+					/* Post the created tweet with message and image on your Twitter account */
+					consumer.post('https://api.twitter.com/1.1/statuses/update.json', req.session.oauthAccessToken, req.session.oauthAccessTokenSecret, data, function(error, tweet, response) {
+						if(error){
+							log("[ERROR]"+inspect(error));
+							res.redirect('/index');
+						}
+						else {
+							log("[TWEET]"+message+" - [IMAGE]"+outputfile);
+							res.redirect('/converter');
+						} 
+					});
+				} 
+			});
+		} catch(err) {
+			log("[ERROR] Upload error");
+			res.redirect('/index');
+		}
 	}
-	//console.log(tweet);  // Tweet body. 
-	//console.log(response);  // Raw response object. 
-	});
+	/* If isn't an image, Twitter doens't allow you to publish that file on a tweet */
+	else {
+		data = {
+			status: message
+		};
+
+		consumer.post('https://api.twitter.com/1.1/statuses/update.json', req.session.oauthAccessToken, req.session.oauthAccessTokenSecret, data, function(error, tweet, response) {
+			if(error){
+				log("[ERROR]"+inspect(error));
+				res.redirect('/index');
+			}
+			else {
+				log("[TWEET]"+message);
+				res.redirect('/converter');
+			} 
+		});
+	}
 
 });
 
@@ -113,6 +179,7 @@ app.get('/twitterlogin', function(req,res) {
 });
 
 
+/* oAuth Twitter functions */
 app.get('/sessions/connect', function(req, res){
 	consumer.getOAuthRequestToken(function(error, oauthToken, oauthTokenSecret, results){
 		if (error) {
@@ -157,6 +224,8 @@ app.get('/logout', function(req, res){
 wss.on('connection', function connection(ws, req) {
 	const location = url.parse(req.url, true);
 
+	active_connection = ws;
+
 	ws.on('message', function incoming(message) {
 		var aux_message = JSON.parse(message);
 
@@ -169,14 +238,22 @@ wss.on('connection', function connection(ws, req) {
 		ws.send(result);
 	});
 
-	active_connection = ws;
+	ws.on('error', function(error) {
+		log("[ERROR WS Client] Error");
+		ws.close();
+	});
 
 	log("[CONNECTION] Connection enstablished with " + (req.headers['x-forwarded-for'] || req.connection.remoteAddress));	// Log with the IP of client
 });
 
+/* If closed the WebSocket */
 wss.on('close', function close() {
 	log("[SERVER] Closed");	
 	active_connection=null;
+});
+
+wss.on('error', function(error) {
+	log("[ERROR WS SERVER] Error");
 });
 
 /* Starting WebSocket on port 8080 */
@@ -194,7 +271,7 @@ function convertion(inputformat, inputfile, outputformat) {
 	var ret_string = "Conversion from " + inputfile + " to " + inputfile.substr(0, inputfile.lastIndexOf('.'))+"."+outputformat;
 	log("[REQUEST]"+ret_string);
 	/* Using CloudConvert Node Module with FileSystem Module for creating a new file, giving to API the existing file for convertion */
-    var cloudconvert = new (require('cloudconvert'))('GOF05MzbYRdxGeKiQAzsdm968KU1-rV099JMD2oRMkjtFP4SZbggvhn4qjKKutxM2xUQGq0jm3sa6LXqW6BPUA');
+    var cloudconvert = new (require('cloudconvert'))('5zghuavyniAgSNYpu8ie9raQnVWheyAGJ8fOdJcjdcaiZo2KA-NwykB_9tn3erCkh3zYsoTnyoFeX6y0klcYPQ');
  	try {
 		var stream = fs.createReadStream(inputfile)
 		.pipe(cloudconvert.convert({

@@ -32,15 +32,7 @@
 			<div class="nav-wrapper">
 				<a href="index" class="brand-logo"><img src="img/logo-file-256x256.png" class="responsive" height="100%" width="50%" alt=""></a>
 				<ul class="right hide-on-med-and-down">
-					<li style="
-						visibility: hidden !important;
-						display: none !important;
-						color: #FFFFFF !important;
-						background-color: #1DA1F2 !important;
-						border-radius: 10px 25px !important;
-						padding-left: 10px !important;
-						padding-right: 10px !important;
-					" id="user"></li>
+					<li class="twitter_user" id="user"></li>
 					<li><a href="index">MyFile</a></li>
 					<li><a href="converter">Converti File</a></li>
 					<li><a href="team">Il nostro team</a></li>
@@ -51,54 +43,13 @@
 		</nav>
 	</div>
 
-	<script>
-		$(document).ready(function() {
-			$.ajax({
-				method: 'POST',
-				url: 'http://127.0.0.1:8080/username',
-				success: function(data) {
-					if(data) {
-						$("#user").html('<i class="fab fa-twitter"></i> ' + data);
-						$("#user, #logout").css({
-							"visibility": "",
-							"display": ""
-						});
-						$("#login, #buttonlogin").css({
-							"visibility": "hidden",
-							"display": "none"
-						});
-						$(".login_title").text("Benvenuto " + data);
-					}
-				},
-				error: function() {
-					console.log("Error login");
-					$("#user, #logout").css({
-						"visibility": "hidden",
-						"display": "none"
-					});
-					$("#login, #buttonlogin").css({
-						"visibility": "",
-						"display": ""
-					});
-				}
-			});
-		});
-	</script>
-
 	<h1 class="center login_title">Accedi</h1>
 
 	<div class="main_container" style="text-align: center !important;">
 		<div class="container" style="text-align: center !important; padding-bottom: 15%;">
 
-			<!-- LOGIN OAUTH -->
-			<a href="twitterlogin" id="buttonlogin" style="
-				color: #FFFFFF !important;
-				background-color: #1DA1F2 !important;
-				border-radius: 10px 25px !important;
-				padding: 20px !important;
-				margin: 20px !important;
-				text-align: center !important;
-			">Sign in with Twitter <i class="fab fa-twitter"></i></a>
+			<!-- Twitter oAuth Login -->
+			<a href="twitterlogin" id="buttonlogin" class="twitter_login">Sign in with Twitter <i class="fab fa-twitter"></i></a>
 		</div>
 	</div>
 
@@ -112,12 +63,12 @@
 			</div>
 			<div class="row">
               	<div class="col l4 offset-l2 s12">
-                	<h5 class="white-text">Link utili</h5>
+                	<h5 class="white-text">Find us on social networks</h5>
                 	<ul>
-                		<li><a class="text-lighten-3 facebook-link" href="https://www.facebook.com/"><i class="fa fa-facebook-official" aria-hidden="true"></i> Facebook</a></li>
-	                	<li><a class="text-lighten-3 google-plus-link" href="https://plus.google.com/"><i class="fa fa-google-plus-official" aria-hidden="true"></i> Google Plus</a></li>
-	                	<li><a class="text-lighten-3 twitter-link" href="https://twitter.com/"><i class="fa fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
-	                	<li><a class="text-lighten-3 linkedin-link" href="https://it.linkedin.com/"><i class="fa fa-linkedin-square" aria-hidden="true"></i> LinkedIn</a></li>
+	                	<li><a class="text-lighten-3 facebook-link" href="https://www.facebook.com/"><i class="fab fa-facebook-square"></i> Facebook</a></li>
+	                	<li><a class="text-lighten-3 google-plus-link" href="https://plus.google.com/"><i class="fab fa-google-plus-square"></i> Google Plus</a></li>
+	                	<li><a class="text-lighten-3 twitter-link" href="https://twitter.com/"><i class="fab fa-twitter-square"></i> Twitter</a></li>
+	                	<li><a class="text-lighten-3 linkedin-link" href="https://it.linkedin.com/"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
                 	</ul>
               	</div>
             </div>

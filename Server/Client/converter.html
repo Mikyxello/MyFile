@@ -48,14 +48,14 @@
 					var received_msg = evt.data;
 					console.log("Received "+received_msg);
 
+					/* Show buttons with get to do to the server */
 					document.getElementById("fileDownload").href = "http://127.0.0.1:8080/download?filename=" + received_msg;
 					document.getElementById("fileDownload").download = received_msg;
 					document.getElementById("fileDownload").style.visibility = "visible";
 
-					document.getElementById("twitterShare").href = "http://127.0.0.1:8080/twittershare?filename=" + received_msg;
+					document.getElementById("twitterShare").href = "http://127.0.0.1:8080/twittershare?filename=" + received_msg + "&outputformat=" + 
+						$("#outputformat").val();
 					document.getElementById("twitterShare").style.visibility = "visible";
-
-					//ws.close();
 				};
 
 				ws.onclose = function() {
@@ -63,7 +63,7 @@
 				};
 
 				window.onbeforeunload = function(event) {
-					socket.close();
+					ws.close();
 				};
 			}
 
@@ -79,15 +79,7 @@
 			<div class="nav-wrapper">
 				<a href="index" class="brand-logo"><img src="/img/logo-file-256x256.png" alt="LOGO" class="responsive" height="100%" width="50%" alt=""></a>
 				<ul class="right hide-on-med-and-down">
-					<li style="
-						visibility: hidden !important;
-						display: none !important;
-						color: #FFFFFF !important;
-						background-color: #1DA1F2 !important;
-						border-radius: 10px 25px !important;
-						padding-left: 10px !important;
-						padding-right: 10px !important;
-					" id="user"></li>
+					<li class="twitter_user" id="user"></li>
 					<li><a href="index">MyFile</a></li>
 					<li><a href="#">Converti File</a></li>
 					<li><a href="team">Il nostro team</a></li>
@@ -97,40 +89,6 @@
 			</div>
 		</nav>
 	</div>
-
-	<script>
-		$(document).ready(function() {
-			$.ajax({
-				method: 'POST',
-				url: 'http://127.0.0.1:8080/username',
-				success: function(data) {
-					if(data) {
-						$("#user").html('<i class="fab fa-twitter"></i> ' + data);
-						$("#user, #logout").css({
-							"visibility": "",
-							"display": ""
-						});
-						$("#login").css({
-							"visibility": "hidden",
-							"display": "none"
-						});
-					}
-				},
-				error: function() {
-					console.log("Error login");
-					$("#user, #logout").css({
-						"visibility": "hidden",
-						"display": "none"
-					});
-					$("#login").css({
-						"visibility": "",
-						"display": ""
-					});
-				}
-			});
-		});
-	</script>
-
 	<h1 class="center">Converti il tuo file</h1>
 
 	<div class="main_container">
@@ -175,7 +133,7 @@
 			</div>
 			<div class="input-field col s12 m6" style="text-align: center !important; visibility: hidden !important;">
 				<a class="btn waves-effect waves-light" id="twitterShare" name="twitterShare">Condividi su Twitter
-					<i class="fa fa-file" aria-hidden="true"></i>
+					<i class="fab fa-twitter"></i>
 				</a>
 			</div>
 			<br><br><br><br><br><br><br>
@@ -192,12 +150,12 @@
 			</div>
 			<div class="row">
               	<div class="col l4 offset-l2 s12">
-                	<h5 class="white-text">Link utili</h5>
+                	<h5 class="white-text">Find us on social networks</h5>
                 	<ul>
-	                	<li><a class="text-lighten-3 facebook-link" href="https://www.facebook.com/"><i class="fa fa-facebook-official" aria-hidden="true"></i> Facebook</a></li>
-	                	<li><a class="text-lighten-3 google-plus-link" href="https://plus.google.com/"><i class="fa fa-google-plus-official" aria-hidden="true"></i> Google Plus</a></li>
-	                	<li><a class="text-lighten-3 twitter-link" href="https://twitter.com/"><i class="fa fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
-	                	<li><a class="text-lighten-3 linkedin-link" href="https://it.linkedin.com/"><i class="fa fa-linkedin-square" aria-hidden="true"></i> LinkedIn</a></li>
+	                	<li><a class="text-lighten-3 facebook-link" href="https://www.facebook.com/"><i class="fab fa-facebook-square"></i> Facebook</a></li>
+	                	<li><a class="text-lighten-3 google-plus-link" href="https://plus.google.com/"><i class="fab fa-google-plus-square"></i> Google Plus</a></li>
+	                	<li><a class="text-lighten-3 twitter-link" href="https://twitter.com/"><i class="fab fa-twitter-square"></i> Twitter</a></li>
+	                	<li><a class="text-lighten-3 linkedin-link" href="https://it.linkedin.com/"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
                 	</ul>
               	</div>
             </div>

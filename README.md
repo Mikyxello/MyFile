@@ -24,8 +24,17 @@ MyFile è un'applicazione web che si pone l'obbiettivo di fornire un servizio RE
 
 # To Do
 ### Funzionalità da implementare
+* Implementare pagina di Error 404 (opzionale)
+* Implementare auto select on change del tipo di file da convertire (opzionale)
+* Implementare oAuth con Google (opzionale)
+
+## Bugs
+* Upload di file locati nel client (funziona solo con file nella directory del server)
+* Necessità di temporizzare l'uscita del pulsante download / twittershare con download effettivo su server
+
+### Done
 * <del>Implementare Twitter oAuth lato client/server</del>
-* Condivisione su Twitter previo oAuth
+* <del>Condivisione su Twitter previo oAuth</del>
 * <del>Visualizzazione del nickname di Twitter dopo il login affiancato dal logo di Twitter</del>
 * <del>Starting website</del>
 * <del>Pagina HTML per il login (tramite oAuth)</del>
@@ -35,10 +44,3 @@ MyFile è un'applicazione web che si pone l'obbiettivo di fornire un servizio RE
 * <del>Loggin su server RabbitMQ tramite protocollo AMQP</del>
 * <del>Download su client del file convertito</del>
 * <del>Una volta effettuata la richiesta dal client, ricevere redirect su pagina con pulsante di download (che accede al link ricevuto dalla conversione)</del>
-
-
-## Bugs
-* Upload di file locati nel client (funziona solo con file nella directory del server)
-* <del>Problema nel download del file, non salvare il file convertito nel server ma inviare il link per il download al client</del>
-* Mancata visualizzazione immagini, CSS e utilizzo file JS (nel caricamento HTML da server)
-* In chiusura del browser genera errore non gestito da client (probabile chiusura WebSocket non gestita)

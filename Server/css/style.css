@@ -75,3 +75,29 @@ html,body {
 	margin-bottom: 5px;
 	background-color: #283E4A;
 }
+
+.twitter_user {
+	color: #FFFFFF !important;
+	background-color: #4AB3F4 !important;
+	border-radius: 5px 15px !important;
+	padding-left: 10px !important;
+	padding-right: 10px !important;
+	margin-right: 20px !important;
+}
+
+.twitter_user:hover {
+	background-color: #1DA1F2 !important;
+}
+
+.twitter_login {
+	color: #FFFFFF !important;
+	background-color: #4AB3F4 !important;
+	border-radius: 10px 25px !important;
+	padding: 20px !important;
+	margin: 20px !important;
+	text-align: center !important;
+}
+
+.twitter_login:hover {
+	background-color: #1DA1F2 !important;
+}
