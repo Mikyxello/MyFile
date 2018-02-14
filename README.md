@@ -29,7 +29,7 @@ MyFile è un'applicazione web che si pone l'obbiettivo di fornire un servizio RE
 * Implementare oAuth con Google (opzionale)
 
 ## Bugs
-* Upload di file locati nel client rimane in attesa risposta
+* No bugs found
 
 ### Done
 * <del>Implementare Twitter oAuth lato client/server</del>
