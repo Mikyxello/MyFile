@@ -56,20 +56,6 @@ const wss = new WebSocket.Server({ server });
 var active_connection = null;
 var user;
 
-/* Automatic request on every page for checking if is logged in */
-app.post('/username', function(req, res) {
-	consumer.get("https://api.twitter.com/1.1/account/verify_credentials.json", req.session.oauthAccessToken, req.session.oauthAccessTokenSecret, function (error, data, response) {
-		if (error) {
-			user = null;
-			res.end();
-		} else {
-			var parsedData = JSON.parse(data);
-			user = inspect(parsedData.screen_name).replace(/['"]+/g, "");
-			res.send(inspect(parsedData.screen_name));
-		} 
-	});
-});
-
 /* ---- Pages redirect ----- */
 app.get('/', function(req, res) {
 	res.sendFile('Client/index.html', {root: __dirname });
@@ -79,7 +65,7 @@ app.get('/index', function(req, res) {
 	res.sendFile('Client/index.html', {root: __dirname });
 });
 
-app.get('/loginpage', function(req, res) {
+app.get('/login', function(req, res) {
 	res.sendFile('Client/login.html', {root: __dirname });
 });
 
@@ -92,85 +78,6 @@ app.get('/converter', function(req, res) {
 });
 /* ----------------------- */
 
-
-app.get('/twittershare', function(req,res) {
-	/* Variables for filenaming */
-	var filename = req.query.filename;
-	var outputformat = req.query.outputformat;
-	var name = filename.substr(0, filename.lastIndexOf('.'));
-	var outputfile = name + "." + outputformat;	// File to upload
-
-	var message="Ho convertito il mio file " + filename + " tramite MyFile!";
-	
-	var media_id;
-	var data;
-   	var file;
-
-   	/* If the file is an image, upload it with the post */
-	if(outputformat == 'jpg' || outputformat == 'png') {
-
-		try {
-			/* Create a BASE64 encoded file for upload */
-			file = new Buffer(fs.readFileSync(outputfile)).toString('base64');
-
-			/* Upload it on Twitter */
-			consumer.post('https://upload.twitter.com/1.1/media/upload.json', req.session.oauthAccessToken, req.session.oauthAccessTokenSecret, {media: file}, function(error, upload, response) {
-				if(error){
-					log("[TWITTER UPLOAD ERROR] Not logged in");
-					req.session.error = 'Not logged in';
-					res.redirect('/loginpage');
-				}
-				else {
-					log("[TWITTER UPLOADED]"+outputfile);
-
-					/* Take media_id_string on Twitter */
-					var json_uploaded = JSON.parse(upload);
-					media_id = inspect(json_uploaded.media_id_string);
-					media_id = media_id.replace(/['"]+/g, '');
-
-					data = {
-						status: message,
-						media_ids: media_id
-					};
-
-					/* Post the created tweet with message and image on your Twitter account */
-					consumer.post('https://api.twitter.com/1.1/statuses/update.json', req.session.oauthAccessToken, req.session.oauthAccessTokenSecret, data, function(error, tweet, response) {
-						if(error){
-							log("[TWEET ERROR]"+inspect(error));
-							res.redirect('/index');
-						}
-						else {
-							log("[TWEET]"+message+" - [IMAGE]"+outputfile);
-							res.redirect('/converter');
-						} 
-					});
-				} 
-			});
-		} catch(err) {
-			log("[TWITTER ERROR] Twitter upload error");
-			res.redirect('/index');
-		}
-	}
-	/* If isn't an image, Twitter doens't allow you to publish that file on a tweet */
-	else {
-		data = {
-			status: message
-		};
-
-		consumer.post('https://api.twitter.com/1.1/statuses/update.json', req.session.oauthAccessToken, req.session.oauthAccessTokenSecret, data, function(error, tweet, response) {
-			if(error){
-				var json_error = JSON.parse(error);
-				log("[ERROR]"+inspect(json_error.message));
-				res.redirect('/index');
-			}
-			else {
-				log("[TWEET]"+message);
-				res.redirect('/converter');
-			} 
-		});
-	}
-
-});
 
 /* Login on Twitter via oAuth */
 app.get('/twitterlogin', function(req,res) {
@@ -188,7 +95,9 @@ app.get('/twitterlogin', function(req,res) {
 app.get('/sessions/connect', function(req, res){
 	consumer.getOAuthRequestToken(function(error, oauthToken, oauthTokenSecret, results){
 		if (error) {
-			res.status(500).send("Error getting OAuth request token : " + inspect(error));
+			log("[ERROR] Impossible to request authorization");
+			res.redirect('/login');
+			//res.status(500).send("Error getting OAuth request token : " + inspect(error));
 		} else {
 			req.session.oauthRequestToken = oauthToken;
 			req.session.oauthRequestTokenSecret = oauthTokenSecret;
@@ -199,7 +108,9 @@ app.get('/sessions/connect', function(req, res){
 app.get('/sessions/callback', function(req, res){
 	consumer.getOAuthAccessToken(req.session.oauthRequestToken, req.session.oauthRequestTokenSecret, req.query.oauth_verifier, function(error, oauthAccessToken, oauthAccessTokenSecret, results) {
 		if (error) {
-			res.status(500).send("Error getting OAuth access token : " + inspect(error) + "[" + oauthAccessToken + "]" + "[" + oauthAccessTokenSecret + "]" + "[" + inspect(results) + "]");
+			log("[ERROR] Authorization negated by user");
+			res.redirect('/login');
+			//res.status(500).send("Error getting OAuth access token : " + inspect(error) + "[" + oauthAccessToken + "]" + "[" + oauthAccessTokenSecret + "]" + "[" + inspect(results) + "]");
 		} else {
 			req.session.oauthAccessToken = oauthAccessToken;
 			req.session.oauthAccessTokenSecret = oauthAccessTokenSecret;
@@ -209,33 +120,53 @@ app.get('/sessions/callback', function(req, res){
 	});
 });
 
+/* Logout from Twitter destroying session */
+app.get('/logout', function(req, res){
+	log("[LOGOUT] Logout effettuato!");
+	req.session.destroy();
+	res.redirect('/index');
+	user = null;
+});
+
+
+/* Automatic request on every page for checking if is logged in and get the username */
+app.post('/username', function(req, res) {
+	consumer.get("https://api.twitter.com/1.1/account/verify_credentials.json", req.session.oauthAccessToken, req.session.oauthAccessTokenSecret, function (error, data, response) {
+		if (error) {
+			user = null;
+			res.end();
+		} else {
+			/* Get username from received data from Twitter */
+			var parsedData = JSON.parse(data);
+			user = inspect(parsedData.screen_name).replace(/['"]+/g, "");
+			res.send(inspect(parsedData.screen_name));
+		} 
+	});
+});
+
 /* Request for upload a file on server */
 app.post('/upload', function(req, res) {
 	var form = new formidable.IncomingForm();
 	form.parse(req, function(err, fields, files) {
-		// `file` is the name of the <input> field of type `file`
 
+		/* Manage the temp path for creating new path with the file */
 		var old_path = files.inputfile.path;
 		var file_size = files.inputfile.size;
 		var file_ext = files.inputfile.name.split('.').pop();
 		var index = old_path.lastIndexOf('\\') + 1;
 		var file_name = old_path.substr(index);
 
+		/* If user logged in create new directory where upload the file with user name */
 		if (user) {
 			if (!fs.existsSync('./'+user)){
 				fs.mkdirSync('./'+user);
 			}
 		}
-
 		var new_path;
+		if (user) new_path = path.join(process.cwd(), '/'+user+'/', files.inputfile.name);
+		else new_path = path.join(process.cwd(), '/', files.inputfile.name);
 
-		if (user) {
-			new_path = path.join(process.cwd(), '/'+user+'/', files.inputfile.name);
-		}
-		else {
-			new_path = path.join(process.cwd(), '/', files.inputfile.name);
-		}
-
+		/* Create new file from the temp file */
 		fs.readFile(old_path, function(err, data) {
 			fs.writeFile(new_path, data, function(err) {
 				fs.unlink(old_path, function(err) {
@@ -245,7 +176,7 @@ app.post('/upload', function(req, res) {
 					} else {
 						log("[UPOLOAD] File " + files.inputfile.name + "uploaded.");
 						res.send("Uploaded");
-						active_connection.send('Uploaded');
+						active_connection.send('Uploaded');	// Message for sending the second request of conversion
 					}
 				});
 			});
@@ -253,22 +184,96 @@ app.post('/upload', function(req, res) {
 	});
 });
 
-/* Executing file download request */
+/* Executing file download request (if logged in grab the file from the right directory) */
 app.get('/download', function(req, res){
 	var path_to = '';
 	if(user) path_to = user+'/';
-
 	var filename = req.query.filename;
 	log("[DOWNLOAD]" + filename);
 	res.download(path_to+filename);
 });
 
-/* Logout from Twitter */
-app.get('/logout', function(req, res){
-	log("[LOGOUT] Logout effettuato!");
-	req.session.destroy();
-	res.redirect('/index');
-	user = null;
+app.get('/twittershare', function(req,res) {
+	/* Variables for filenaming */
+	var filename = req.query.filename;
+	var outputformat = req.query.outputformat;
+	var name = filename.substr(0, filename.lastIndexOf('.'));
+	var outputfile = name + "." + outputformat;	// File to upload
+
+	var message="Ho convertito il mio file " + filename + " tramite MyFile!";
+	
+	var media_id;
+	var data;
+   	var file;
+
+	var path_to = '';
+ 	if (user) path_to = user+'/';
+
+   	/* If the file is an image, upload it with the post */
+	if(outputformat == 'jpg' || outputformat == 'png') {
+		try {
+			/* Create a BASE64 encoded file for upload */
+			file = new Buffer(fs.readFileSync(path_to+outputfile)).toString('base64');
+
+			/* Upload it on Twitter */
+			consumer.post('https://upload.twitter.com/1.1/media/upload.json', req.session.oauthAccessToken, req.session.oauthAccessTokenSecret, {media: file}, function(error, upload, response) {
+				if(error){
+					/* Impossible to share file on Twitter cause the user isn't logged in */
+					log("[TWITTER UPLOAD ERROR] Not logged in");
+					req.session.error = 'Not logged in';
+					res.redirect('/login');
+				}
+				else {
+					log("[TWITTER UPLOADED]"+outputfile);
+
+					/* Take media_id_string on Twitter */
+					var json_uploaded = JSON.parse(upload);
+					media_id = inspect(json_uploaded.media_id_string);
+					media_id = media_id.replace(/['"]+/g, '');
+
+					data = {
+						status: message,
+						media_ids: media_id
+					};
+
+					/* Post the created Tweet with message and image on your Twitter account */
+					consumer.post('https://api.twitter.com/1.1/statuses/update.json', req.session.oauthAccessToken, req.session.oauthAccessTokenSecret, data, function(error, tweet, response) {
+						if(error){
+							log("[TWEET ERROR]"+inspect(error));
+							res.redirect('/index');
+						}
+						else {
+							log("[TWEET]"+message+" - [IMAGE]"+outputfile);
+							res.redirect('/converter');
+						} 
+					});
+				} 
+			});
+		} catch(err) {
+			/* Catched buffer error */
+			log("[TWITTER ERROR] Twitter upload error");
+			res.redirect('/index');
+		}
+	}
+	/* If isn't an image, Twitter doens't allow you to publish that file on a tweet , generate a normal Tweet */
+	else {
+		data = {status: message};
+
+		consumer.post('https://api.twitter.com/1.1/statuses/update.json', req.session.oauthAccessToken, req.session.oauthAccessTokenSecret, data, function(error, tweet, response) {
+			if(error){
+				/* Error generating the Tweet */
+				var json_error = JSON.parse(error);
+				log("[ERROR]"+inspect(json_error.message));
+				res.redirect('/index');
+			}
+			else {
+				/* Tweet published */
+				log("[TWEET]"+message);
+				res.redirect('/converter');
+			} 
+		});
+	}
+
 });
 
 
@@ -278,6 +283,7 @@ wss.on('connection', function connection(ws, req) {
 
 	active_connection = ws;
 
+	/* When received the file data of the file which is being converted */
 	ws.on('message', function incoming(message) {
 		var aux_message = JSON.parse(message);
 
@@ -288,6 +294,7 @@ wss.on('connection', function connection(ws, req) {
 		convertion(inputformat, inputfile, outputformat);
 	});
 
+	/* When error on WebSocket (client), close the connection */
 	ws.on('error', function(error) {
 		log("[CLIENT CLOSED] Closed connection with client");
 		ws.close();
@@ -303,6 +310,7 @@ wss.on('close', function close() {
 	active_connection=null;
 });
 
+/* Error on the server's WebSocket */
 wss.on('error', function(error) {
 	log("[ERROR WS SERVER] Error");
 });
@@ -322,13 +330,13 @@ function convertion(inputformat, inputfile, outputformat) {
 	var ret_string = "Conversion from " + inputfile + " to " + inputfile.substr(0, inputfile.lastIndexOf('.'))+"."+outputformat;
 	log("[REQUEST]"+ret_string);
 
-
 	/* Using CloudConvert Node Module with FileSystem Module for creating a new file, giving to API the existing file for convertion */
     var cloudconvert = new (require('cloudconvert'))('GOF05MzbYRdxGeKiQAzsdm968KU1-rV099JMD2oRMkjtFP4SZbggvhn4qjKKutxM2xUQGq0jm3sa6LXqW6BPUA');
  	try {
  		var path_to = '';
  		if (user) path_to = user+'/';
 
+ 		/* Read the file to be converted, pass it to cloudconvert, create new file where is written the converted one */
 		var stream = fs.createReadStream(path_to+inputfile)
 		.pipe(cloudconvert.convert({
 		"inputformat": inputformat,
@@ -339,24 +347,27 @@ function convertion(inputformat, inputfile, outputformat) {
 		}))
 		.pipe(fs.createWriteStream(path_to+inputfile.substr(0, inputfile.lastIndexOf('.'))+"."+outputformat));
 
+		/* When finished the creation of the new file, send the new filename to the client */
 		stream.on('finish', function() {
 			log("[SUCCESS]"+ret_string);
 			active_connection.send(inputfile.substr(0, inputfile.lastIndexOf('.'))+"."+outputformat);
 			return inputfile.substr(0, inputfile.lastIndexOf('.'))+"."+outputformat;
 		});
 
+		/* On error reading, converting or creating file */
 		stream.on('error', function(e) {
-			log("[CONVERT ERROR] Error converting file");
+			log("[CONVERT ERROR] Error converting file: "+inspect(e));
 			return e;
 		});
 	} catch(err){
+		/* Error on FileSystem catched */
 		log("[ERROR]"+err.message);
 		active_connection.send("Error");
 		return err;
 	}
 }
 
-/* Logging via AMQP on RabbitMQ */
+/* Logging via AMQP on RabbitMQ to Logger */
 function log(string) {
 	amqp.connect('amqp://localhost', function(err, conn) {
 		conn.createChannel(function(err, ch) {

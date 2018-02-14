@@ -40,10 +40,10 @@
   				processData: false,
   				cache: false,
   				success: function(data){
-  					Materialize.toast(data, 3000)
+  					Materialize.toast(data, 3000);
   				},
   				error: function(error){
-  					Materialize.toast(error, 5000)
+  					Materialize.toast(error, 5000);
   				}
   			});
 		}
@@ -108,7 +108,7 @@
 					<li><a href="index">MyFile</a></li>
 					<li><a href="#">Converti File</a></li>
 					<li><a href="team">Il nostro team</a></li>
-					<li><a href="loginpage" id="login">Login</a></li>
+					<li><a href="login" id="login">Login</a></li>
 					<li><a href="logout" style="visibility: hidden; display: none;" id="logout">Logout</a></li>
 				</ul>
 			</div>
@@ -199,32 +199,6 @@
 
 			$("#filename").on("change", function() {
 				$("#inputformat").val($("#filename").val().split('.').pop());
-
-				var inputformat = $("#inputformat").val();
-
-				switch(inputformat) {
-					case "jpg":
-						$("#outputformat").val("png");
-						break;
-					case "doc":
-						$("#outputformat").val("pdf");
-						break;
-					case "pdf":
-						$("#outputformat").val("doc");
-						break;
-					case "png":
-						$("#outputformat").val("jpg");
-						break;
-					case "mp4":
-						$("#outputformat").val("avi");
-						break;	
-					case "avi":
-						$("#outputformat").val("mp4");
-						break;
-					default:
-						$("#outputformat").val("pdf");
-						break;
-				};
 			});
 
 			$('#inputfile').on("change", function() {
@@ -232,13 +206,6 @@
 					$("#outputformatDiv, #buttonConvert").css("visibility", "");
 				}
 			});
-
-			/* Hide download button after download */
-			/*
-			$("#fileDownload").on("click", function() {
-				$("#fileDownload").css("visibility", "hidden");
-			});
-			*/
 		});
 	</script>
 
