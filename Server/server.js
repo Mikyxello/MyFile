@@ -19,6 +19,8 @@ var inspect = require('util-inspect');
 var logger = require('express-logger');
 var cookieParser = require('cookie-parser');
 var FileReader = require('filereader');
+var MyBuffer = require('buffer');
+var formidable = require('formidable');
 /* ------------ */
 
 var _twitterConsumerKey = "g9fWPHBCmMyLyWVQwfLL6tfTs";
@@ -38,9 +40,9 @@ app.use(bodyParser.json());
 app.use(logger({ path: "log/express.log"}));
 app.use(cookieParser());
 app.use(session({ secret: "very secret", resave: false, saveUninitialized: true}));
-app.use('/img', express.static(__dirname + '/img'));
-app.use('/css', express.static(__dirname + '/css'));
-app.use('/js', express.static(__dirname + '/js'));
+app.use('Client/img', express.static(__dirname + '/img'));
+app.use('Client/css', express.static(__dirname + '/css'));
+app.use('Client/js', express.static(__dirname + '/js'));
 app.use(express.static(__dirname + '/Client'));
 
 app.use(function(req, res, next) {
@@ -52,16 +54,17 @@ app.use(function(req, res, next) {
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 var active_connection = null;
-var a_t = '';
-
+var user;
 
 /* Automatic request on every page for checking if is logged in */
 app.post('/username', function(req, res) {
 	consumer.get("https://api.twitter.com/1.1/account/verify_credentials.json", req.session.oauthAccessToken, req.session.oauthAccessTokenSecret, function (error, data, response) {
 		if (error) {
+			user = null;
 			res.end();
 		} else {
 			var parsedData = JSON.parse(data);
+			user = inspect(parsedData.screen_name).replace(/['"]+/g, "");
 			res.send(inspect(parsedData.screen_name));
 		} 
 	});
@@ -113,11 +116,12 @@ app.get('/twittershare', function(req,res) {
 			/* Upload it on Twitter */
 			consumer.post('https://upload.twitter.com/1.1/media/upload.json', req.session.oauthAccessToken, req.session.oauthAccessTokenSecret, {media: file}, function(error, upload, response) {
 				if(error){
-					log("[ERROR]"+error);
-					res.redirect('/index');
+					log("[TWITTER UPLOAD ERROR] Not logged in");
+					req.session.error = 'Not logged in';
+					res.redirect('/loginpage');
 				}
 				else {
-					log("[UPLOADED]"+outputfile);
+					log("[TWITTER UPLOADED]"+outputfile);
 
 					/* Take media_id_string on Twitter */
 					var json_uploaded = JSON.parse(upload);
@@ -132,7 +136,7 @@ app.get('/twittershare', function(req,res) {
 					/* Post the created tweet with message and image on your Twitter account */
 					consumer.post('https://api.twitter.com/1.1/statuses/update.json', req.session.oauthAccessToken, req.session.oauthAccessTokenSecret, data, function(error, tweet, response) {
 						if(error){
-							log("[ERROR]"+inspect(error));
+							log("[TWEET ERROR]"+inspect(error));
 							res.redirect('/index');
 						}
 						else {
@@ -143,7 +147,7 @@ app.get('/twittershare', function(req,res) {
 				} 
 			});
 		} catch(err) {
-			log("[ERROR] Upload error");
+			log("[TWITTER ERROR] Twitter upload error");
 			res.redirect('/index');
 		}
 	}
@@ -155,7 +159,8 @@ app.get('/twittershare', function(req,res) {
 
 		consumer.post('https://api.twitter.com/1.1/statuses/update.json', req.session.oauthAccessToken, req.session.oauthAccessTokenSecret, data, function(error, tweet, response) {
 			if(error){
-				log("[ERROR]"+inspect(error));
+				var json_error = JSON.parse(error);
+				log("[ERROR]"+inspect(json_error.message));
 				res.redirect('/index');
 			}
 			else {
@@ -173,7 +178,7 @@ app.get('/twitterlogin', function(req,res) {
 		if (error) {
 			res.redirect('/sessions/connect');
 		} else {
-			res.redirect('/index');
+			res.redirect('/connect');
 		} 
 	});
 });
@@ -204,12 +209,58 @@ app.get('/sessions/callback', function(req, res){
 	});
 });
 
+/* Request for upload a file on server */
+app.post('/upload', function(req, res) {
+	var form = new formidable.IncomingForm();
+	form.parse(req, function(err, fields, files) {
+		// `file` is the name of the <input> field of type `file`
+
+		var old_path = files.inputfile.path;
+		var file_size = files.inputfile.size;
+		var file_ext = files.inputfile.name.split('.').pop();
+		var index = old_path.lastIndexOf('\\') + 1;
+		var file_name = old_path.substr(index);
+
+		if (user) {
+			if (!fs.existsSync('./'+user)){
+				fs.mkdirSync('./'+user);
+			}
+		}
+
+		var new_path;
+
+		if (user) {
+			new_path = path.join(process.cwd(), '/'+user+'/', files.inputfile.name);
+		}
+		else {
+			new_path = path.join(process.cwd(), '/', files.inputfile.name);
+		}
+
+		fs.readFile(old_path, function(err, data) {
+			fs.writeFile(new_path, data, function(err) {
+				fs.unlink(old_path, function(err) {
+					if (err) {
+						res.status(500);
+						res.send("Error uploading file, try again in few time...");
+					} else {
+						log("[UPOLOAD] File " + files.inputfile.name + "uploaded.");
+						res.send("Uploaded");
+						active_connection.send('Uploaded');
+					}
+				});
+			});
+		});
+	});
+});
 
 /* Executing file download request */
 app.get('/download', function(req, res){
+	var path_to = '';
+	if(user) path_to = user+'/';
+
 	var filename = req.query.filename;
 	log("[DOWNLOAD]" + filename);
-	res.download(filename);
+	res.download(path_to+filename);
 });
 
 /* Logout from Twitter */
@@ -217,6 +268,7 @@ app.get('/logout', function(req, res){
 	log("[LOGOUT] Logout effettuato!");
 	req.session.destroy();
 	res.redirect('/index');
+	user = null;
 });
 
 
@@ -233,14 +285,13 @@ wss.on('connection', function connection(ws, req) {
 		var inputfile = aux_message.inputfile;
 		var outputformat = aux_message.outputformat;
 
-		var result = convertion(inputformat, inputfile, outputformat);
-
-		ws.send(result);
+		convertion(inputformat, inputfile, outputformat);
 	});
 
 	ws.on('error', function(error) {
-		log("[ERROR WS Client] Error");
+		log("[CLIENT CLOSED] Closed connection with client");
 		ws.close();
+		active_connection=null;
 	});
 
 	log("[CONNECTION] Connection enstablished with " + (req.headers['x-forwarded-for'] || req.connection.remoteAddress));	// Log with the IP of client
@@ -270,10 +321,15 @@ function convertion(inputformat, inputfile, outputformat) {
 	/* Log string */
 	var ret_string = "Conversion from " + inputfile + " to " + inputfile.substr(0, inputfile.lastIndexOf('.'))+"."+outputformat;
 	log("[REQUEST]"+ret_string);
+
+
 	/* Using CloudConvert Node Module with FileSystem Module for creating a new file, giving to API the existing file for convertion */
-    var cloudconvert = new (require('cloudconvert'))('5zghuavyniAgSNYpu8ie9raQnVWheyAGJ8fOdJcjdcaiZo2KA-NwykB_9tn3erCkh3zYsoTnyoFeX6y0klcYPQ');
+    var cloudconvert = new (require('cloudconvert'))('GOF05MzbYRdxGeKiQAzsdm968KU1-rV099JMD2oRMkjtFP4SZbggvhn4qjKKutxM2xUQGq0jm3sa6LXqW6BPUA');
  	try {
-		var stream = fs.createReadStream(inputfile)
+ 		var path_to = '';
+ 		if (user) path_to = user+'/';
+
+		var stream = fs.createReadStream(path_to+inputfile)
 		.pipe(cloudconvert.convert({
 		"inputformat": inputformat,
 		"outputformat": outputformat,
@@ -281,15 +337,22 @@ function convertion(inputformat, inputfile, outputformat) {
 		"filename": inputfile,
 		"timeout": 10
 		}))
-		.pipe(fs.createWriteStream(inputfile.substr(0, inputfile.lastIndexOf('.'))+"."+outputformat));
+		.pipe(fs.createWriteStream(path_to+inputfile.substr(0, inputfile.lastIndexOf('.'))+"."+outputformat));
 
-		log("[SUCCESS]"+ret_string);
+		stream.on('finish', function() {
+			log("[SUCCESS]"+ret_string);
+			active_connection.send(inputfile.substr(0, inputfile.lastIndexOf('.'))+"."+outputformat);
+			return inputfile.substr(0, inputfile.lastIndexOf('.'))+"."+outputformat;
+		});
 
-		/* Return filename of the converted one */
-		return inputfile.substr(0, inputfile.lastIndexOf('.'))+"."+outputformat;		
+		stream.on('error', function(e) {
+			log("[CONVERT ERROR] Error converting file");
+			return e;
+		});
 	} catch(err){
 		log("[ERROR]"+err.message);
-		return err.message;
+		active_connection.send("Error");
+		return err;
 	}
 }
 

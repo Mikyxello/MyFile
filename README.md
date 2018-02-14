@@ -3,9 +3,9 @@
 MyFile è un'applicazione web che si pone l'obbiettivo di fornire un servizio RESTful di conversione file collegato con le API di "Cloud Converter" che permette di salvare i file convertiti sul proprio dispositivo (PC, Smartphone o Tablet) ed eventualmente effettuare una condivisione su Twitter dell'avvenuta conversione (previa autenticazione su Twitter tramite oAuth). Il tutto realizzato con un client sviluppato in HTML5, JS e CSS3, unito con un server sviluppato in JS tramite NodeJS e i suoi moduli.
 
 ## Collaboratori
-*Michele Anselmi* [@Mikyxello](https://github.com/Mikyxello)
-*Gianmarco Cariggi* [@giacar](https://github.com/giacar)
-*Riccardo Ceccarelli* [@ricciricciard](https://github.com/ricciricciard)
+* *Michele Anselmi* [@Mikyxello](https://github.com/Mikyxello)
+* *Gianmarco Cariggi* [@giacar](https://github.com/giacar)
+* *Riccardo Ceccarelli* [@ricciricciard](https://github.com/ricciricciard)
 
 ## CSS & JS Library
 * [Materialize](http://materializecss.com/)
@@ -29,8 +29,7 @@ MyFile è un'applicazione web che si pone l'obbiettivo di fornire un servizio RE
 * Implementare oAuth con Google (opzionale)
 
 ## Bugs
-* Upload di file locati nel client (funziona solo con file nella directory del server)
-* Necessità di temporizzare l'uscita del pulsante download / twittershare con download effettivo su server
+* Upload di file locati nel client rimane in attesa risposta
 
 ### Done
 * <del>Implementare Twitter oAuth lato client/server</del>
