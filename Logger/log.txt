@@ -148,3 +148,131 @@
 [ERROR] Not logged in
 [CLIENT CLOSED] Closed connection with client
 [CLIENT CLOSED] Closed connection with client
+[SERVER] Boot server
+[LOGIN] Effettuato login!
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPOLOAD] File queries-SQL-1.doc uploaded.
+[REQUEST]Conversion from queries-SQL-1.doc to queries-SQL-1.pdf
+[SUCCESS]Conversion from queries-SQL-1.doc to queries-SQL-1.pdf
+[DOWNLOAD]queries-SQL-1.pdf
+[TWEET]Ho convertito il mio file queries-SQL-1.pdf tramite MyFile!
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPOLOAD] File prova scritta micro 4 luglio 2016.pdf uploaded.
+[REQUEST]Conversion from prova scritta micro 4 luglio 2016.pdf to prova scritta micro 4 luglio 2016.avi
+[CONVERT ERROR] Error converting file: { [Error: This conversiontype is not supported! (pdf to avi)] code: 400 }
+[SERVER] Boot server
+[LOGIN] Effettuato login!
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPOLOAD] File prova scritta micro aprile 2017.pdf uploaded.
+[REQUEST]Conversion from prova scritta micro aprile 2017.pdf to prova scritta micro aprile 2017.mp4
+[CONVERT ERROR] Error converting file: { [Error: This conversiontype is not supported! (pdf to mp4)] code: 400 }
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPOLOAD] File Screenshot (30).jpg uploaded.
+[REQUEST]Conversion from Screenshot (30).jpg to Screenshot (30).png
+[SUCCESS]Conversion from Screenshot (30).jpg to Screenshot (30).png
+[DOWNLOAD]Screenshot (30).png
+[TWITTER UPLOADED]Screenshot (30).png
+[TWEET]Ho convertito il mio file Screenshot (30).png tramite MyFile! - [IMAGE]Screenshot (30).png
+[LOGOUT] Logout effettuato!
+[CLIENT CLOSED] Closed connection with client
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPOLOAD] File queries-SQL-1.pdf uploaded.
+[REQUEST]Conversion from queries-SQL-1.pdf to queries-SQL-1.doc
+[SUCCESS]Conversion from queries-SQL-1.pdf to queries-SQL-1.doc
+[ERROR] Not logged in
+[DOWNLOAD]queries-SQL-1.doc
+[CLIENT CLOSED] Closed connection with client
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPOLOAD] File Screenshot (27).png uploaded.
+[REQUEST]Conversion from Screenshot (27).png to Screenshot (27).jpg
+[SUCCESS]Conversion from Screenshot (27).png to Screenshot (27).jpg
+[DOWNLOAD]Screenshot (27).jpg
+[CLIENT CLOSED] Closed connection with client
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[REQUEST]Conversion from Screenshot (32).png to Screenshot (32).jpg
+[UPOLOAD] File Screenshot (32).png uploaded.
+[SUCCESS]Conversion from Screenshot (32).png to Screenshot (32).jpg
+[DOWNLOAD]Screenshot (32).jpg
+[CLIENT CLOSED] Closed connection with client
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[REQUEST]Conversion from Screenshot (29).png to Screenshot (29).jpg
+[UPOLOAD] File Screenshot (29).png uploaded.
+[SUCCESS]Conversion from Screenshot (29).png to Screenshot (29).jpg
+[CLIENT CLOSED] Closed connection with client
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPOLOAD] File Screenshot (31).png uploaded.
+[REQUEST]Conversion from Screenshot (31).png to Screenshot (31).jpg
+[SUCCESS]Conversion from Screenshot (31).png to Screenshot (31).jpg
+[DOWNLOAD]Screenshot (31).jpg
+[CLIENT CLOSED] Closed connection with client
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[REQUEST]Conversion from Screenshot (26).png to Screenshot (26).jpg
+[UPOLOAD] File Screenshot (26).png uploaded.
+[CONVERT ERROR] Error converting file: { [Error: connect ETIMEDOUT 137.74.133.1:443]
+  errno: 'ETIMEDOUT',
+  code: 'ETIMEDOUT',
+  syscall: 'connect',
+  address: '137.74.133.1',
+  port: 443 }
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPOLOAD] File Screenshot (29).png uploaded.
+[REQUEST]Conversion from Screenshot (29).png to Screenshot (29).jpg
+[CONVERT ERROR] Error converting file: { [Error: connect ETIMEDOUT 137.74.133.1:443]
+  errno: 'ETIMEDOUT',
+  code: 'ETIMEDOUT',
+  syscall: 'connect',
+  address: '137.74.133.1',
+  port: 443 }
+[SERVER] Boot server
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPOLOAD] File Screenshot (27).png uploaded.
+[REQUEST]Conversion from Screenshot (27).png to Screenshot (27).jpg
+[CONVERT ERROR] Error converting file: { [Error: connect ETIMEDOUT 137.74.133.1:443]
+  errno: 'ETIMEDOUT',
+  code: 'ETIMEDOUT',
+  syscall: 'connect',
+  address: '137.74.133.1',
+  port: 443 }
+[SERVER] Boot server
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPOLOAD] File Screenshot (28).png uploaded.
+[REQUEST]Conversion from Screenshot (28).png to Screenshot (28).jpg
+[CONVERT ERROR] Error converting file: { [Error: Your daily limit of 25 conversion minutes exceeded. Your daily quota will be reset in 8 hours and 23 minutes.] code: 402 }
+[SERVER] Boot server
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPOLOAD] File Screenshot (29).png uploaded.
+[REQUEST]Conversion from Screenshot (29).png to Screenshot (29).jpg
+[SUCCESS]Conversion from Screenshot (29).png to Screenshot (29).jpg
+[CLIENT CLOSED] Closed connection with client
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPOLOAD] File Screenshot (33).png uploaded.
+[REQUEST]Conversion from Screenshot (33).png to Screenshot (33).jpg
+[SUCCESS]Conversion from Screenshot (33).png to Screenshot (33).jpg
+[CLIENT CLOSED] Closed connection with client
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPOLOAD] File Screenshot (29).png uploaded.
+[REQUEST]Conversion from Screenshot (29).png to Screenshot (29).jpg
+[SUCCESS]Conversion from Screenshot (29).png to Screenshot (29).jpg
+[DOWNLOAD]"Screenshot (29).jpg"
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPOLOAD] File 1366_768_20100708095452266587.jpg uploaded.
+[REQUEST]Conversion from 1366_768_20100708095452266587.jpg to 1366_768_20100708095452266587.jpg
+[SERVER] Boot server
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[REQUEST]Conversion from 1366_768_20100708095452266587.jpg to 1366_768_20100708095452266587.png
+[UPOLOAD] File 1366_768_20100708095452266587.jpg uploaded.
+[SUCCESS]Conversion from 1366_768_20100708095452266587.jpg to 1366_768_20100708095452266587.png
+[DOWNLOAD]"1366_768_20100708095452266587.png"
+[CLIENT CLOSED] Closed connection with client
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPOLOAD] File 1366_768_20121207125058204315.jpg uploaded.
+[REQUEST]Conversion from 1366_768_20121207125058204315.jpg to 1366_768_20121207125058204315.png
+[SUCCESS]Conversion from 1366_768_20121207125058204315.jpg to 1366_768_20121207125058204315.png
+[DOWNLOAD]1366_768_20121207125058204315.png
+[CLIENT CLOSED] Closed connection with client
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPOLOAD] File dark_circle_gray_black_9834_1366x768.jpg uploaded.
+[REQUEST]Conversion from dark_circle_gray_black_9834_1366x768.jpg to dark_circle_gray_black_9834_1366x768.png
+[SUCCESS]Conversion from dark_circle_gray_black_9834_1366x768.jpg to dark_circle_gray_black_9834_1366x768.png
+[DOWNLOAD]dark_circle_gray_black_9834_1366x768.png
+[TWITTER UPLOAD ERROR] Not logged in

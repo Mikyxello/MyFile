@@ -27,8 +27,8 @@
   	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 
   	<script>
-
   		function uploadFile() {
+  			document.getElementById("buttonConvert").style.visibility = "hidden";
   			document.getElementById("fileDownload").style.visibility = "hidden";
 			document.getElementById("twitterShare").style.visibility = "hidden";
   			var formData = new FormData();
@@ -178,7 +178,7 @@
 			</div>
 
 			<div class="input-field col s12 m6" style="text-align: center !important; visibility: hidden !important;">
-				<a class="btn waves-effect waves-light" href="" download="" id="fileDownload" name="fileDownload">Download
+				<a class="btn waves-effect waves-light"  id="fileDownload" name="fileDownload">Download
 					<i class="fa fa-file" aria-hidden="true"></i>
 				</a>
 			</div>
@@ -232,7 +232,15 @@
 
 			$('#inputfile').on("change", function() {
 				$("#outputformatDiv, #buttonConvert").css("visibility", "");
+				document.getElementById("fileDownload").style.visibility = "hidden";
+				document.getElementById("twitterShare").style.visibility = "hidden";
 			});
+
+			$('#outputformat').on("change", function() {
+				document.getElementById("fileDownload").style.visibility = "hidden";
+				document.getElementById("twitterShare").style.visibility = "hidden";
+			});
+
 		});
 	</script>
 

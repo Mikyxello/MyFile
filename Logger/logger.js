@@ -14,6 +14,7 @@ amqp.connect('amqp://localhost', function(err, conn) {
 
 	conn.on('error', function(err) {
 		console.log("Error during loggin");
+		logger.end();
 		throw err;
 	});
 
