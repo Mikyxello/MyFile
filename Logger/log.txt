@@ -148,3 +148,18 @@
 [ERROR] Not logged in
 [CLIENT CLOSED] Closed connection with client
 [CLIENT CLOSED] Closed connection with client
+[SERVER] Boot server
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPOLOAD] File PSSC L2 Appendix Power Flow Analysis.pdf uploaded.
+[REQUEST]Conversion from PSSC L2 Appendix Power Flow Analysis.pdf to PSSC L2 Appendix Power Flow Analysis.doc
+[SUCCESS]Conversion from PSSC L2 Appendix Power Flow Analysis.pdf to PSSC L2 Appendix Power Flow Analysis.doc
+[DOWNLOAD]PSSC L2 Appendix Power Flow Analysis.doc
+[ERROR] Not logged in
+[LOGIN] Effettuato login!
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPOLOAD] File PSSC L2 Appendix Power Flow Analysis.pdf uploaded.
+[REQUEST]Conversion from PSSC L2 Appendix Power Flow Analysis.pdf to PSSC L2 Appendix Power Flow Analysis.doc
+[SUCCESS]Conversion from PSSC L2 Appendix Power Flow Analysis.pdf to PSSC L2 Appendix Power Flow Analysis.doc
+[TWEET]Ho convertito il mio file PSSC L2 Appendix Power Flow Analysis.doc tramite MyFile!
+[LOGOUT] Logout effettuato!
+[SERVER] Boot server
