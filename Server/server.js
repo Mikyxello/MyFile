@@ -171,8 +171,9 @@ app.post('/upload', function(req, res) {
 			fs.writeFile(new_path, data, function(err) {
 				fs.unlink(old_path, function(err) {
 					if (err) {
-						res.status(500);
 						res.send("Error uploading file, try again in few time...");
+						active_connection.close();
+						active_connection = null;
 					} else {
 						log("[UPOLOAD] File " + files.inputfile.name + " uploaded.");
 						res.send("Uploaded");
@@ -331,7 +332,7 @@ function convertion(inputformat, inputfile, outputformat) {
 	log("[REQUEST]"+ret_string);
 
 	/* Using CloudConvert Node Module with FileSystem Module for creating a new file, giving to API the existing file for convertion */
-    var cloudconvert = new (require('cloudconvert'))('GOF05MzbYRdxGeKiQAzsdm968KU1-rV099JMD2oRMkjtFP4SZbggvhn4qjKKutxM2xUQGq0jm3sa6LXqW6BPUA');
+    var cloudconvert = new (require('cloudconvert'))('5zghuavyniAgSNYpu8ie9raQnVWheyAGJ8fOdJcjdcaiZo2KA-NwykB_9tn3erCkh3zYsoTnyoFeX6y0klcYPQ');
  	try {
  		var path_to = '';
  		if (user) path_to = user+'/';
@@ -357,13 +358,17 @@ function convertion(inputformat, inputfile, outputformat) {
 		/* On error reading, converting or creating file */
 		stream.on('error', function(e) {
 			log("[CONVERT ERROR] Error converting file: "+inspect(e));
-			active_connection.send("Error: Impossible to convert")
+			active_connection.send("Error: Impossible to convert");
+			active_connection.close();
+			active_connection = null;
 			return e;
 		});
 	} catch(err){
 		/* Error on FileSystem catched */
 		log("[ERROR]"+err.message);
 		active_connection.send("Error: Failed to read/write file");
+		active_connection.close();
+		active_connection = null;
 		return err;
 	}
 }
