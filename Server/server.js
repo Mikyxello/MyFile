@@ -2,18 +2,16 @@
 var querystring = require('querystring');
 var express = require('express');
 var bodyParser = require('body-parser');
-var url = require('url');
 var http = require('http');
+var url = require('url');
 var util = require('util');
 var amqp =  require('amqplib/callback_api');
 var WebSocket = require('ws');
 var fs = require('fs');
 var request = require('request');
 var path = require('path');
-var readline = require('readline');
-var TwitterPackage = require('twitter');
 var oauth = require('oauth');
-var methodOverride = require('method-override');
+var TwitterPackage = require('twitter');
 var session = require('express-session');
 var inspect = require('util-inspect');
 var logger = require('express-logger');
@@ -21,16 +19,18 @@ var cookieParser = require('cookie-parser');
 var FileReader = require('filereader');
 var MyBuffer = require('buffer');
 var formidable = require('formidable');
+var readline = require('readline');
+var methodOverride = require('method-override');
 /* ------------ */
 
+/* Twitter app keys */
 var _twitterConsumerKey = "g9fWPHBCmMyLyWVQwfLL6tfTs";
 var _twitterConsumerSecret = "ek7h6Sgmm8HhaYGwTzz94OxYaNmKci2ca7Zr20zh7cP8jwgdnP";
 
+/* oAuth instance */
 var consumer = new oauth.OAuth(
     "https://twitter.com/oauth/request_token", "https://twitter.com/oauth/access_token", 
     _twitterConsumerKey, _twitterConsumerSecret, "1.0A", "http://127.0.0.1:8080/sessions/callback", "HMAC-SHA1");
-
-
 
 /* Setting express module for http requests */
 var app = express();
@@ -174,7 +174,7 @@ app.post('/upload', function(req, res) {
 						res.status(500);
 						res.send("Error uploading file, try again in few time...");
 					} else {
-						log("[UPOLOAD] File " + files.inputfile.name + "uploaded.");
+						log("[UPOLOAD] File " + files.inputfile.name + " uploaded.");
 						res.send("Uploaded");
 						active_connection.send('Uploaded');	// Message for sending the second request of conversion
 					}
@@ -221,7 +221,7 @@ app.get('/twittershare', function(req,res) {
 					/* Impossible to share file on Twitter cause the user isn't logged in */
 					log("[TWITTER UPLOAD ERROR] Not logged in");
 					req.session.error = 'Not logged in';
-					res.redirect('/login');
+					res.send("Not logged in");
 				}
 				else {
 					log("[TWITTER UPLOADED]"+outputfile);
@@ -239,12 +239,13 @@ app.get('/twittershare', function(req,res) {
 					/* Post the created Tweet with message and image on your Twitter account */
 					consumer.post('https://api.twitter.com/1.1/statuses/update.json', req.session.oauthAccessToken, req.session.oauthAccessTokenSecret, data, function(error, tweet, response) {
 						if(error){
-							log("[TWEET ERROR]"+inspect(error));
-							res.redirect('/index');
+							var json_error = JSON.parse(error);
+							log("[TWEET ERROR]"+inspect(json_error.message));
+							res.send(inspect(json_error.message));
 						}
 						else {
 							log("[TWEET]"+message+" - [IMAGE]"+outputfile);
-							res.redirect('/converter');
+							res.send("Tweeted");
 						} 
 					});
 				} 
@@ -252,7 +253,7 @@ app.get('/twittershare', function(req,res) {
 		} catch(err) {
 			/* Catched buffer error */
 			log("[TWITTER ERROR] Twitter upload error");
-			res.redirect('/index');
+			res.send(err);
 		}
 	}
 	/* If isn't an image, Twitter doens't allow you to publish that file on a tweet , generate a normal Tweet */
@@ -262,14 +263,13 @@ app.get('/twittershare', function(req,res) {
 		consumer.post('https://api.twitter.com/1.1/statuses/update.json', req.session.oauthAccessToken, req.session.oauthAccessTokenSecret, data, function(error, tweet, response) {
 			if(error){
 				/* Error generating the Tweet */
-				var json_error = JSON.parse(error);
-				log("[ERROR]"+inspect(json_error.message));
-				res.redirect('/index');
+				log("[ERROR] Not logged in");
+				res.send("Not logged in");
 			}
 			else {
 				/* Tweet published */
 				log("[TWEET]"+message);
-				res.redirect('/converter');
+				res.send("Tweeted");
 			} 
 		});
 	}
@@ -357,12 +357,13 @@ function convertion(inputformat, inputfile, outputformat) {
 		/* On error reading, converting or creating file */
 		stream.on('error', function(e) {
 			log("[CONVERT ERROR] Error converting file: "+inspect(e));
+			active_connection.send("Error: Impossible to convert")
 			return e;
 		});
 	} catch(err){
 		/* Error on FileSystem catched */
 		log("[ERROR]"+err.message);
-		active_connection.send("Error");
+		active_connection.send("Error: Failed to read/write file");
 		return err;
 	}
 }

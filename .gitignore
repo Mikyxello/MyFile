@@ -5,9 +5,12 @@ express.log
 *.png
 *.pdf
 *.doc
+*.mp4
+*.avi
 
 !*.js
 !*.css
+!*.md
 !Server/Client/css
 !Server/Client/css/*
 !Server/Client/js

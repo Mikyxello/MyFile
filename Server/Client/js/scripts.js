@@ -23,7 +23,6 @@ $(document).ready(function() {
 			}
 		},
 		error: function() {
-			console.log("Error login");
 			$("#user, #logout").css({
 				"visibility": "hidden",
 				"display": "none"
