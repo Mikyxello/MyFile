@@ -1,16 +1,16 @@
 # INFO
-* **Authors**: Michele Anselmi, Gianmarco Cariggi, Riccardo Ceccarelli 
+* **Authors**: [Michele Anselmi](https://github.com/Mikyxello), [Gianmarco Cariggi](https://github.com/giacar), [Riccardo Ceccarelli](https://github.com/ricciricciard) 
 * **Title**: Documentazione MyFile
 
 # DESCRIPTION
-*L'applicazione MyFile viene utilizzata per convertire i file da un formato all'altro quando si hanno necessità di utilizzare un certo tipo di file (per esempio da PNG a JPG per eliminare la trasparenza o da PDF a DOC per poter lavorare facilmente su un file).
+*L'applicazione MyFile viene utilizzata per convertire i file da un formato all'altro quando si hanno necessità di utilizzare un certo tipo di file (per esempio da PNG a JPG per eliminare la trasparenza o da PDF a DOC per poter modificare facilmente un file).
 Viene realizzato con un server basato sulla tecnologia [NodeJS](https://nodejs.org/en/) e un client basato su HTML5, CSS3 e JS.*
 
 ## Logger
-*Il "Logger" è un consumer di messaggi di logging, costruito con il modulo [AMQPlib](https://www.npmjs.com/package/amqplib), avviato su RabbitMQ e rimane in attesa di messaggi di log tramite il protocollo "AMQP" (Advanced Message Queuing Protocol) con i quali costruisce un file chiamato "log.txt" tramite il modulo "FS" (File System) di NodeJS, creando un canale di scrittura su file per evitare di aprire e chiudere più volte lo stesso file (con diminuzione di prestazioni e consumi più alti).*
+Il "Logger" è un consumer di messaggi di logging, costruito con il modulo [AMQPlib](https://www.npmjs.com/package/amqplib), avviato su RabbitMQ e rimane in attesa di messaggi di log tramite il protocollo "AMQP" (Advanced Message Queuing Protocol) con i quali costruisce un file chiamato "log.txt" tramite il modulo "FS" (File System) di NodeJS, creando un canale di scrittura su file per evitare di aprire e chiudere più volte lo stesso file (con diminuzione di prestazioni e consumi più alti).
 
 ## Server
-*Il server una volta avviato, si apre tramite una WebSocket (modulo "WS") (in localhost, 127.0.0.1, sulla porta 8080) e rimane in attesa di messaggi HTTP utilizzando i moduli "[Express](https://www.npmjs.com/package/express)", "[BodyParser](https://www.npmjs.com/package/body-parser)" e "[HTTP](https://www.npmjs.com/package/http)".
+Il server una volta avviato, si apre tramite una WebSocket (modulo "WS") (in localhost, 127.0.0.1, sulla porta 8080) e rimane in attesa di messaggi HTTP utilizzando i moduli "[Express](https://www.npmjs.com/package/express)", "[BodyParser](https://www.npmjs.com/package/body-parser)" e "[HTTP](https://www.npmjs.com/package/http)".
 Ogni richiesta "GET" o "POST" inviata dal client viene gestita propriamente attraverso il modulo Express con le funzioni .get e .post.
 Per le richieste di pagine vengono gestite attraverso app.get('/page_name', callback) e attraverso l'utilizzo di express.static rendiamo possibile la visualizzazione delle immagini (come il logo ad esempio) e il corretto utilizzo dei file CSS e JS.
 Il server consente all'utente di effettuare richieste di conversioni per file nel seguente modo:
@@ -29,7 +29,7 @@ Altri moduli come [Path](https://www.npmjs.com/package/path), [Request](https://
 ## Client
 * Il client viene realizzato attraverso i linguaggi di scripting e formattazione [HTML5](https://it.wikipedia.org/wiki/HTML5), [JS](https://it.wikipedia.org/wiki/JavaScript) e [CSS](https://it.wikipedia.org/wiki/CSS), per effettuare richieste GET e POST al server per ricevere le pagine e per effettuare le richieste descritte nel server. La grafica è realizzata utilizzando il pacchetto CSS/JS [Materialize](http://materializecss.com/) e gli script realizzati utilizzando i JS di [jQuery](https://jquery.com/) che rendono possibile la visualizzazione "corretta" anche da dispositivi mobili (smartphone e tablet) e su tutti i browser moderni ([Chrome](https://www.google.it/intl/it/chrome/), [Mozilla Firefox](https://www.mozilla.org/it/firefox/new/), ...).
 
-##Funzioni Server
+## Funzioni Server
 - **twitterlogin**: riceve richiesta dal client e accede a Twitter utilizzando i token di sessione;
 - **session/connect**: utilizza i token di accesso per connettersi a Twitter;
 - **session/callback**: utilizza i token di request per effettuare richieste a Twitter;

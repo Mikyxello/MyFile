@@ -24,10 +24,6 @@ MyFile è un'applicazione web che si pone l'obbiettivo di fornire un servizio RE
 
 # To Do
 ### Funzionalità da implementare
-* Implementare pagina di Error 404 (opzionale)
-* Implementare auto select on change del tipo di file da convertire (opzionale)
-* Implementare oAuth con Google (opzionale)
-* Non mostrare pulsante Twitter Share se non loggato
 
 ## Bugs
 * No bugs found
