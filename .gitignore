@@ -7,6 +7,8 @@ express.log
 *.doc
 *.mp4
 *.avi
+*.txt
+*.log
 
 !*.js
 !*.css
