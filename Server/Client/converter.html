@@ -46,6 +46,7 @@
   				},
   				error: function(error){
   					Materialize.toast(error, 5000);
+  					document.getElementById("buttonConvert").style.visibility = "visible";
   				}
   			});
 		}
@@ -64,6 +65,7 @@
   				},
   				error: function(error){
   					document.getElementById("loadingGif").style.visibility = "hidden";
+  					document.getElementById("twitterShare").style.visibility = "visible";
   					Materialize.toast(error, 5000);
   				}
   			});
@@ -104,6 +106,7 @@
 						document.getElementById("twitterShare").style.visibility = "visible";
 						document.getElementById("twitterShare").addEventListener('click', function(){
 							document.getElementById("loadingGif").style.visibility = "visible";
+							document.getElementById("twitterShare").style.visibility = "visible";
 							tweetShare(received_msg, $("#outputformat").val())
 						});
 					}
@@ -115,6 +118,7 @@
 				};
 
 				window.onbeforeunload = function(event) {
+					ws.close();
 				};
 			}
 
@@ -237,6 +241,7 @@
 			});
 
 			$('#outputformat').on("change", function() {
+				document.getElementById("buttonConvert").style.visibility = "visible";
 				document.getElementById("fileDownload").style.visibility = "hidden";
 				document.getElementById("twitterShare").style.visibility = "hidden";
 			});

@@ -1,0 +1,72 @@
+[SERVER] Boot server
+[LOGIN] Effettuato login!
+[LOGOUT] Logout effettuato!
+[LOGIN] Effettuato login!
+[LOGOUT] Logout effettuato!
+[ERROR] Authorization negated by user
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPLOAD] File 1366_768_20100708095452266587.jpg uploaded.
+[REQUEST]Conversion from 1366_768_20100708095452266587.jpg to 1366_768_20100708095452266587.png
+[SUCCESS]Conversion from 1366_768_20100708095452266587.jpg to 1366_768_20100708095452266587.png
+[DOWNLOAD]1366_768_20100708095452266587.png
+[TWITTER UPLOAD ERROR] Not logged in
+[CLIENT CLOSED] Closed connection with client
+[LOGIN] Effettuato login!
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPLOAD] File ColorRaindown-Windows10Wallpaper-dark.jpg uploaded.
+[REQUEST]Conversion from ColorRaindown-Windows10Wallpaper-dark.jpg to ColorRaindown-Windows10Wallpaper-dark.png
+[SUCCESS]Conversion from ColorRaindown-Windows10Wallpaper-dark.jpg to ColorRaindown-Windows10Wallpaper-dark.png
+[DOWNLOAD]ColorRaindown-Windows10Wallpaper-dark.png
+[TWITTER UPLOADED]ColorRaindown-Windows10Wallpaper-dark.png
+[TWEET]Ho convertito il mio file ColorRaindown-Windows10Wallpaper-dark.png tramite MyFile! - [IMAGE]ColorRaindown-Windows10Wallpaper-dark.png
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPLOAD] File Petizione Area Giochi mail.pdf uploaded.
+[REQUEST]Conversion from Petizione Area Giochi mail.pdf to Petizione Area Giochi mail.mp4
+[CONVERT ERROR] Error converting file: { [Error: This conversiontype is not supported! (pdf to mp4)] code: 400 }
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPLOAD] File queries-SQL-1.doc uploaded.
+[REQUEST]Conversion from queries-SQL-1.doc to queries-SQL-1.pdf
+[SUCCESS]Conversion from queries-SQL-1.doc to queries-SQL-1.pdf
+[DOWNLOAD]queries-SQL-1.pdf
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[REQUEST]Conversion from prova scritta micro 4 luglio 2016.pdf to prova scritta micro 4 luglio 2016.avi
+[UPLOAD] File prova scritta micro 4 luglio 2016.pdf uploaded.
+[CONVERT ERROR] Error converting file: { [Error: This conversiontype is not supported! (pdf to avi)] code: 400 }
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPLOAD] File Screenshot (27).jpg uploaded.
+[REQUEST]Conversion from Screenshot (27).jpg to Screenshot (27).png
+[SUCCESS]Conversion from Screenshot (27).jpg to Screenshot (27).png
+[CLIENT CLOSED] Closed connection with client
+[CLIENT CLOSED] Closed connection with client
+[CLIENT CLOSED] Closed connection with client
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPLOAD] File queries-SQL-1 (1).doc uploaded.
+[REQUEST]Conversion from queries-SQL-1 (1).doc to queries-SQL-1 (1).avi
+[CONVERT ERROR] Error converting file: { [Error: This conversiontype is not supported! (doc to avi)] code: 400 }
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPLOAD] File Screenshot (27).jpg uploaded.
+[REQUEST]Conversion from Screenshot (27).jpg to Screenshot (27).jpg
+[SERVER] Boot server
+[LOGIN] Effettuato login!
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPLOAD] File Screenshot (30).jpg uploaded.
+[REQUEST]Conversion from Screenshot (30).jpg to Screenshot (30).png
+[SUCCESS]Conversion from Screenshot (30).jpg to Screenshot (30).png
+[DOWNLOAD]Screenshot (30).png
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPLOAD] File Petizione Area Giochi mail.pdf uploaded.
+[REQUEST]Conversion from Petizione Area Giochi mail.pdf to Petizione Area Giochi mail.mp4
+[CONVERT ERROR] Error converting file: { [Error: This conversiontype is not supported! (pdf to mp4)] code: 400 }
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[REQUEST]Conversion from 6VSFMYMHOP.txt to 6VSFMYMHOP.pdf
+[UPLOAD] File 6VSFMYMHOP.txt uploaded.
+[SUCCESS]Conversion from 6VSFMYMHOP.txt to 6VSFMYMHOP.pdf
+[DOWNLOAD]6VSFMYMHOP.pdf
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPLOAD] File queries-SQL-1 (1).pdf uploaded.
+[REQUEST]Conversion from queries-SQL-1 (1).pdf to queries-SQL-1 (1).avi
+[CONVERT ERROR] Error converting file: { [Error: This conversiontype is not supported! (pdf to avi)] code: 400 }
+[CONNECTION] Connection enstablished with ::ffff:127.0.0.1
+[UPLOAD] File Screenshot (27).jpg uploaded.
+[REQUEST]Conversion from Screenshot (27).jpg to Screenshot (27).jpg
+[CONVERT ERROR] Error converting file: { [Error] code: 400 }

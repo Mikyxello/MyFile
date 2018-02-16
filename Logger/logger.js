@@ -27,6 +27,10 @@ amqp.connect('amqp://localhost', function(err, conn) {
 			ch.consume(q.queue, function(msg) {
 				console.log("%s", msg.content.toString());
 				fs.access('log.txt', function (err) {
+					if(err) {
+						console.log("Errore lettura log.txt");
+						throw err;
+					}
 					logger.write(msg.content.toString() + '\r\n');
 				});
 			}, {noAck: true});

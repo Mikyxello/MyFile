@@ -175,7 +175,7 @@ app.post('/upload', function(req, res) {
 						active_connection.close();
 						active_connection = null;
 					} else {
-						log("[UPOLOAD] File " + files.inputfile.name + " uploaded.");
+						log("[UPLOAD] File " + files.inputfile.name + " uploaded.");
 						res.send("Uploaded");
 						active_connection.send('Uploaded');	// Message for sending the second request of conversion
 					}
@@ -297,6 +297,11 @@ wss.on('connection', function connection(ws, req) {
 
 	/* When error on WebSocket (client), close the connection */
 	ws.on('error', function(error) {
+		ws.close();
+		active_connection=null;
+	});
+
+	ws.on('close', function() {
 		log("[CLIENT CLOSED] Closed connection with client");
 		ws.close();
 		active_connection=null;
@@ -330,6 +335,14 @@ function convertion(inputformat, inputfile, outputformat) {
 	/* Log string */
 	var ret_string = "Conversion from " + inputfile + " to " + inputfile.substr(0, inputfile.lastIndexOf('.'))+"."+outputformat;
 	log("[REQUEST]"+ret_string);
+
+	if("inputformat" == "outputformat") {
+		log("[CONVERT ERROR] Error converting file");
+		active_connection.send("Error: Impossible to convert");
+		active_connection.close();
+		active_connection = null;
+		return "Impossible to convert";
+	}
 
 	/* Using CloudConvert Node Module with FileSystem Module for creating a new file, giving to API the existing file for convertion */
     var cloudconvert = new (require('cloudconvert'))('5zghuavyniAgSNYpu8ie9raQnVWheyAGJ8fOdJcjdcaiZo2KA-NwykB_9tn3erCkh3zYsoTnyoFeX6y0klcYPQ');
@@ -369,6 +382,7 @@ function convertion(inputformat, inputfile, outputformat) {
 		active_connection.send("Error: Failed to read/write file");
 		active_connection.close();
 		active_connection = null;
+		throw err;
 		return err;
 	}
 }
